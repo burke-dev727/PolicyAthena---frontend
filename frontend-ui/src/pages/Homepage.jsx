@@ -3,17 +3,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useNavigate } from 'react-router-dom';
 
-function HomePage() {
+export default function HomePage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
- 
-  const navigate = useNavigate();
-  const goToUserInput = () => {
-    navigate('/userinput');
-  };
 
   const handleLogin = () => {
     alert(`Logging in with ${email}`);
@@ -32,7 +26,7 @@ function HomePage() {
           <Navbar/>  
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">User Profile</Button>
           {/*Use User Input to direct into the Userinput.jsx page for user to input their data*/}
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" OnClick={goToUserInput}>User Input</Button>
+          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">User Input</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Matched Plan</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Compare Plans</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">History</Button>
@@ -63,7 +57,7 @@ function HomePage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <Button onClick={handleLogin} className="w-full">Log In</Button>
+                  <Button onClick={handleLogin} className="w-full" type="button">Log In</Button>
                 </form>
               </TabsContent>
               <TabsContent value="signup">
@@ -86,7 +80,7 @@ function HomePage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <Button onClick={handleSignup} className="w-full">Create Account</Button>
+                  <Button onClick={handleSignup} className="w-full" type="button">Create Account</Button>
                 </form>
               </TabsContent>
             </Tabs>
@@ -96,5 +90,3 @@ function HomePage() {
     </main>
   );
 }
-
-export default <HomePage />;
