@@ -3,11 +3,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useNavigate } from 'react-router-dom';
 
-export default function HomePage() {
+function HomePage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+ 
+  const navigate = useNavigate();
+  const goToUserInput = () => {
+    navigate('/userinput');
+  };
 
   const handleLogin = () => {
     alert(`Logging in with ${email}`);
@@ -23,8 +29,10 @@ export default function HomePage() {
       <aside className="w-64 bg-white p-6 border-r border-gray-200 shadow-md">
         <h2 className="text-2xl font-bold mb-8">PolicyAthena</h2>
         <nav className="flex flex-col space-y-3">
+          <Navbar/>  
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">User Profile</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">User Input</Button>
+          {/*Use User Input to direct into the Userinput.jsx page for user to input their data*/}
+          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" OnClick={goToUserInput}>User Input</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Matched Plan</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Compare Plans</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">History</Button>
@@ -88,3 +96,5 @@ export default function HomePage() {
     </main>
   );
 }
+
+export default <HomePage />;
