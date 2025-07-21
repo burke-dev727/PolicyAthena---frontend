@@ -13,9 +13,7 @@ export default function UserInput() {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
-  const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
+  const [location, setLocation] = useState('');
   const [zipcode, setZipcode] = useState('');
   const [ssn, setSocialSecurity] = useState('');
 
@@ -46,10 +44,9 @@ export default function UserInput() {
   const [is_US_Citizen, setIsUSCitizen] = useState(false);
   const [is_Mediaid, setIsMedicaid] = useState(false);
   const [is_Medicare, setIsMedicare] = useState(false);
+  const [recent_events, setRecentEvents] = useState(''); // write out multiple events
   const [is_Veteran, setIsVeteran] = useState(false);
-  const [recent_events, setRecentEvents] = useState(''); // write out multipel events
   const [is_StudentEligible, setIsStudentEligible] = useState(false);
-  const [is_Disability, setIsDisability] = useState(false);
 
   // State variables for documentation
   const [user_insurance_docs, setUserInsuranceDocs] = useState('');
@@ -58,7 +55,13 @@ export default function UserInput() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // You can handle the collected data here (e.g., send to backend)
-    alert(`Name: ${name}\nAge: ${age}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}\nStreet: ${street}\nCity: ${city}\nState: ${state}\nZipcode: ${zipcode}\nSSN: ${ssn}`);
+    alert(`Name: ${name}\nAge: ${age}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}}\nLocation: ${location}\nZipcode: ${zipcode}\nSSN: ${ssn}`);
+    alert(`Have Insurance: ${have_insurance}\nInsurance Provider: ${insurance_provider}\nPolicy Number: ${policy_number}\nStart Date: ${start_date}\nEnd Date: ${end_date}\nSource: ${source}`);
+    alert(`Employed: ${is_employed}\nEmployer Name: ${employer_name}\nEmployer Offers Insurance: ${is_employeroffers}\nAnnual Income: ${annual_income}\nHousehold Size: ${household_size}`);
+    alert(`Coverage Type: ${coverage_type}\nProviders: ${providers}\nCurrent Conditions: ${current_conditions}\nCurrent Prescriptions: ${current_perscriptions}\nCoverage Level: ${coverage_level}\nMonthly Budget: ${monthly_budget}`);
+    alert(`US Citizen: ${is_US_Citizen}\nMedicaid: ${is_Mediaid}\nMedicare: ${is_Medicare}\nRecent Events: ${recent_events}\nVeteran: ${is_Veteran}\nStudent Eligible: ${is_StudentEligible}`);
+    alert(`Insurance Docs: ${user_insurance_docs}\nProof of Income Docs: ${proof_of_income_docs}`);
+    
   };
 
   return (
@@ -93,49 +96,37 @@ export default function UserInput() {
           onChange={(e) => setAge(e.target.value)}
         />
         <Input
-          type="email"
+          type="text"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <Input
-          type="phone"
+          type="text"
           placeholder="Phone"
           value={email}
           onChange={(e) => setPhone(e.target.value)}
         />
         <Input
-          type="address"
-          placeholder="Address"
+          type="text"
+          placeholder="Address (Street, Number)"
           value={email}
           onChange={(e) => setAddress(e.target.value)}
         />
         <Input
-          type="street"
-          placeholder="Sreet"
+          type="text"
+          placeholder="Location (City, State)"
           value={email}
-          onChange={(e) => setStreet(e.target.value)}
+          onChange={(e) => setLocation(e.target.value)}
         />
         <Input
-          type="city"
-          placeholder="City"
-          value={email}
-          onChange={(e) => setCity(e.target.value)}
-        />
-        <Input
-          type="state"
-          placeholder="State"
-          value={email}
-          onChange={(e) => setState(e.target.value)}
-        />
-        <Input
-            type="zipcode"
+            type="text"
             placeholder="Zipcode"
             value={email}
             onChange={(e) => setZipcode(e.target.value)}
         />
         <Input 
-            type="ssn"
+            type="text"
             placeholder="Social Security Number"
             value={ssn}
             onChange={(e) => setSocialSecurity(e.target.value)}
@@ -147,31 +138,183 @@ export default function UserInput() {
       <h1 className="text-3xl font-bold mb-6 text-center">Current Insurance</h1>
       <form className="max-w-md mx-auto space-y-4" onSubmit={handleSubmit}>
         <Input
+          type="checkbox"
+          placeholder="Do you have insurance?"
+          value={email}
+          onChange={(e) => setHaveInsurance(e.target.checked)} 
+        />
+        <Input
           type="text"
           placeholder="Insurance Provider"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setProviderInsurance(e.target.value)}
         />
         <Input
           type="text"
           placeholder="Policy Number"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setPolicyNumber(e.target.value)}
         />
         <Input
           type="date"
           placeholder="Start Date"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setStartDate(e.target.value)}
         />
         <Input
           type="date"
           placeholder="End Date"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="Source"
+          value={email}
+          onChange={(e) => setSource(e.target.value)}
         />
         <Button type="submit" className="w-full">Submit</Button>
       </form>
+      
+      {/* Main Content : Employment Details Submission*/}
+      <h1 className="text-3xl font-bold mb-6 text-center">Employment Details</h1>
+      <form className="max-w-md mx-auto space-y-4" onSubmit={handleSubmit}>
+        <Input
+          type="checkbox"
+          placeholder="Are you Employed?"
+          value={email}
+          onChange={(e) => setIsEmployed(e.target.checked)}
+        />
+        <Input
+          type="text"
+          placeholder="Employer Name"
+          value={email}
+          onChange={(e) => setEmployerName(e.target.value)}
+        />
+        <Input
+          type="checkbox"
+          placeholder="Does your employer offer insurance?"
+          value={email}
+          onChange={(e) => setIsEmployerOffers(e.target.checked)}
+        />
+        <Input
+          type="number"
+          placeholder="Annual Income"
+          value={email}
+          onChange={(e) => setAnnualIncome(e.target.value)}
+        />
+        <Input 
+          type="number"
+          placeholder="Household Size"
+          value={email}
+          onChange={(e) => setHouseholdSize(e.target.value)}
+        />
+        <Button type="submit" className="w-full">Submit</Button>
+      </form> 
+
+      {/* Main Content : Coverage Needs Submission*/}
+      <h1 className="text-3xl font-bold mb-6 text-center">Coverage Needs</h1>
+      <form className="max-w-md mx-auto space-y-4" onSubmit={handleSubmit}>
+        <Input
+          type="text"
+          placeholder="Coverage Type"
+          value={email}
+          onChange={(e) => setCoverageType(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="Providers"
+          value={email}
+          onChange={(e) => setProviders(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="Current Conditions"
+          value={email}
+          onChange={(e) => setCurrentConditions(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="Current Prescriptions"
+          value={email}
+          onChange={(e) => setCurrentPrescriptions(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="Coverage Level"
+          value={email}
+          onChange={(e) => setCoverageLevel(e.target.value)}
+        />
+        <Input
+          type="number"
+          placeholder="Monthly Budget"
+          value={email}
+          onChange={(e) => setMonthlyBudget(e.target.value)}
+        />
+        <Button type="submit" className="w-full">Submit</Button> 
+      </form>
+
+      {/* Main Content : Eligibility Details Submission*/}
+      <h1 className="text-3xl font-bold mb-6 text-center">Eligibility Details</h1>
+      <form className="max-w-md mx-auto space-y-4" onSubmit={handleSubmit}>
+        <Input
+          type="checkbox"
+          placeholder="Are you a US Citizen?"
+          value={email}
+          onChange={(e) => setIsUSCitizen(e.target.checked)}
+        />
+        <Input
+          type="checkbox"
+          placeholder="Are you eligible for Medicaid?"
+          value={email}
+          onChange={(e) => setIsMedicaid(e.target.checked)}
+        />
+        <Input  
+          type="checkbox"
+          placeholder="Are you eligible for Medicare?"
+          value={email}
+          onChange={(e) => setIsMedicare(e.target.checked)}
+        />
+        <Input
+          type="text"
+          placeholder="Recent Events"
+          value={email}
+          onChange={(e) => setRecentEvents(e.target.value)}
+        />
+        <Input
+          type="checkbox"
+          placeholder="Are you a Veteran?"
+          value={email}
+          onChange={(e) => setIsVeteran(e.target.checked)}
+        />
+        <Input
+          type="checkbox"
+          placeholder="Are you a Student Eligible for Insurance?"
+          value={email}
+          onChange={(e) => setIsStudentEligible(e.target.checked)}
+        />
+        <Button type="submit" className="w-full">Submit</Button>
+      </form>
+
+      {/* Main Content : Documentation Submission*/}
+      <h1 className="text-3xl font-bold mb-6 text-center">Documentation</h1>
+      <form className="max-w-md mx-auto space-y-4" onSubmit={handleSubmit}>
+        <Input
+          type="text"
+          placeholder="Insurance Documents"
+          value={user_insurance_docs}
+          onChange={(e) => setUserInsuranceDocs(e.target.value)}
+        />
+        <Input
+          type="text"
+          placeholder="Proof of Income Documents"
+          value={proof_of_income_docs}
+          onChange={(e) => setProofOfIncomeDocs(e.target.value)}
+        />
+        <Button type="submit" className="w-full">Submit</Button>
+      </form>
+
+      {/* End of Main Content */}
     </main>
   );
 }
