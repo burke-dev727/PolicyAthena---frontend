@@ -1,3 +1,11 @@
+/*
+* UserInput.jsx
+* Author: James Zheng
+* Date: 2025-07-15
+* Description: This component allows users to input their personal information, current insurance details, employment details, coverage needs, eligibility details, and documentation for insurance matching.
+* It includes forms for each section and handles the submission of user data.
+*/
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
