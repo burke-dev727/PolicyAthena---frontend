@@ -1,7 +1,23 @@
-import HomePage from './pages/Homepage';
+/*
+* File: App.jsx
+* Author: James Zheng
+* Date: 2025-07-27
+* Description: This is the main application component that sets up the routing for the PolicyAthena frontend.
+* It includes routes for the homepage and user input page, and handles unmatched routes with a 404 error page.
+*/
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import HomePage from '@/pages/Homepage';
+import UserInput from './pages/Userinput';
 
-function App() {
-  return <HomePage />;
+export default function App(){
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/userinput" element={<UserInput />} />
+        {/*Add more routes as needed*/}
+        <Route path="*" element={<div><Error /></div>} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App;

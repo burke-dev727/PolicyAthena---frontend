@@ -1,10 +1,16 @@
+/*
+* File: Homepage.jsx
+* Author: Xinrui Hou & James Zheng
+* Date: 2025-07-27
+* Description: This is the homepage component for the PolicyAthena frontend. It includes a sidebar for navigation and a main content area with login and signup forms.
+*/
+
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useNavigate } from "react-router-dom";
-
+import { Input } from '../components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomePage() {
   const [email, setEmail] = useState('');
@@ -19,8 +25,7 @@ export default function HomePage() {
     alert(`Creating account for ${username}`);
   };
   
-  // If used, does not render the page correctly. Will need to debug later.
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <main className="flex min-h-screen bg-gray-50 text-gray-800">
@@ -29,7 +34,7 @@ export default function HomePage() {
         <h2 className="text-2xl font-bold mb-8">PolicyAthena</h2>
         <nav className="flex flex-col space-y-3">
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">User Profile</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate("/Userinput")}>User Input</Button>
+          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/userinput')}>User Input</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Matched Plan</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Compare Plans</Button>
           <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">History</Button>
