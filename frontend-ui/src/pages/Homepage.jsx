@@ -1,8 +1,11 @@
 /*
 * File: Homepage.jsx
 * Author: Xinrui Hou & James Zheng
-* Date: 2025-07-27
+* Date: 2025-07-01
+* Updated: 2025-07-29
 * Description: This is the homepage component for the PolicyAthena frontend. It includes a sidebar for navigation and a main content area with login and signup forms.
+* Notes: Will need to change the name to "signup" as this is the first page if there is no account yet.
+* License: MIT License
 */
 
 import { useState } from 'react';
@@ -33,11 +36,12 @@ export default function HomePage() {
       <aside className="w-64 bg-white p-6 border-r border-gray-200 shadow-md">
         <h2 className="text-2xl font-bold mb-8">PolicyAthena</h2>
         <nav className="flex flex-col space-y-3">
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">User Profile</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/userinput')}>User Input</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Matched Plan</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Compare Plans</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">History</Button>
+          {/* Add Additional pages and naviagtion for the buttons below. Also copy these buttons to every other page */}
+          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userprofile')}>User Profile</Button>
+          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userinput')}>User Input</Button>
+          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Matchedplan')}>Matched Plan</Button>
+          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Compareplans')}>Compare Plans</Button>
+          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/History')}>History</Button>
         </nav>
       </aside>
 

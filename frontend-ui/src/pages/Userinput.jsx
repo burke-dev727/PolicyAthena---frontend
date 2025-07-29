@@ -2,16 +2,15 @@
 * File: UserInput.jsx
 * Author: James Zheng
 * Date: 2025-07-15
+* Updated: 2025-07-29
 * Description: This component allows users to input their personal information, current insurance details, employment details, coverage needs, eligibility details, and documentation for insurance matching.
 * It includes forms for each section and handles the submission of user data.
-* Plans: Make sure that once this page loads, it loads properly with the sidebar and main content area.
+* Notes: Potentially edit the input data or add more fields in the future.
 */
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from "react-router-dom";
 
 export default function UserInput() {
@@ -60,6 +59,8 @@ export default function UserInput() {
   // State variables for documentation
   const [user_insurance_docs, setUserInsuranceDocs] = useState('');
   const[proof_of_income_docs, setProofOfIncomeDocs] = useState('');
+
+  const navigate = useNavigate();
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -70,7 +71,6 @@ export default function UserInput() {
     alert(`Coverage Type: ${coverage_type}\nProviders: ${providers}\nCurrent Conditions: ${current_conditions}\nCurrent Prescriptions: ${current_perscriptions}\nCoverage Level: ${coverage_level}\nMonthly Budget: ${monthly_budget}`);
     alert(`US Citizen: ${is_US_Citizen}\nMedicaid: ${is_Mediaid}\nMedicare: ${is_Medicare}\nRecent Events: ${recent_events}\nVeteran: ${is_Veteran}\nStudent Eligible: ${is_StudentEligible}`);
     alert(`Insurance Docs: ${user_insurance_docs}\nProof of Income Docs: ${proof_of_income_docs}`);
-    
   };
 
   return (
@@ -79,12 +79,12 @@ export default function UserInput() {
     <aside className="w-64 bg-white p-6 border-r border-gray-200 shadow-md">
       <h2 className="text-2xl font-bold mb-8">PolicyAthena</h2>
       <nav className="flex flex-col space-y-3">
-        <Navbar/>  
-        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">User Profile</Button>
-        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">User Input</Button>
-        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Matched Plan</Button>
-        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">Compare Plans</Button>
-        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100">History</Button>
+        {/* Add Additional pages and naviagtion for the buttons below. Also copy these buttons to every other page */}
+        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userprofile')}>User Profile</Button>
+        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userinput')}>User Input</Button>
+        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Matchedplan')}>Matched Plan</Button>
+        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Compareplans')}>Compare Plans</Button>
+        <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/History')}>History</Button>
       </nav>
     </aside>
 
@@ -98,11 +98,10 @@ export default function UserInput() {
           <Input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} />
           <Input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
           <Input type="text" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} />
-          <Input type="text" placeholder="Address (Street, Number)" value={address} onChange={e => setAddress(e.target.value)} />
+          <Input type="text" placeholder="Address (Street name, House number)" value={address} onChange={e => setAddress(e.target.value)} />
           <Input type="text" placeholder="Location (City, State)" value={location} onChange={e => setLocation(e.target.value)} />
           <Input type="text" placeholder="Zipcode" value={zipcode} onChange={e => setZipcode(e.target.value)} />
           <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} />
-          <Button type="submit" className="w-full">Submit</Button>
         </form>
       </section>
 
@@ -110,16 +109,25 @@ export default function UserInput() {
       <section>
         <h1 className="text-3xl font-bold mb-6 text-center">Current Insurance</h1>
         <form className="max-w-md mx-auto space-y-4" onSubmit={handleSubmit}>
-          <div className="flex items-center space-x-2">
-            <input type="checkbox" checked={have_insurance} onChange={e => setHaveInsurance(e.target.checked)} />
-            <label>Do you have insurance?</label>
-          </div>
+        <div className="flex items-center space-x-2">
+          <input type="checkbox" checked={have_insurance} onChange={e => setHaveInsurance(e.target.checked)} />
+          <label>Do you have insurance?</label>
+        </div>
           <Input type="text" placeholder="Insurance Provider" value={insurance_provider} onChange={e => setProviderInsurance(e.target.value)} />
           <Input type="text" placeholder="Policy Number" value={policy_number} onChange={e => setPolicyNumber(e.target.value)} />
-          <Input type="date" placeholder="Start Date" value={start_date} onChange={e => setStartDate(e.target.value)} />
-          <Input type="date" placeholder="End Date" value={end_date} onChange={e => setEndDate(e.target.value)} />
+          <div>
+            <label className="block mb-1">Start Date of Coverage:</label>
+            <Input type="date" value={start_date} onChange={e => setStartDate(e.target.value)} />
+            {start_date && (
+            <div className="text-sm text-gray-600 mt-1">Coverage starts on: <span className="font-semibold">{start_date}</span></div>)}
+          </div>
+          <div>
+            <label className="block mb-1">End Date of Coverage:</label>
+            <Input type="date" value={end_date} onChange={e => setEndDate(e.target.value)} />
+            {end_date && (
+            <div className="text-sm text-gray-600 mt-1">Coverage ends on: <span className="font-semibold">{end_date}</span></div>)}
+          </div>
           <Input type="text" placeholder="Source" value={source} onChange={e => setSource(e.target.value)} />
-          <Button type="submit" className="w-full">Submit</Button>
         </form>
       </section>
 
@@ -138,7 +146,6 @@ export default function UserInput() {
           </div>
           <Input type="number" placeholder="Annual Income" value={annual_income} onChange={e => setAnnualIncome(e.target.value)} />
           <Input type="number" placeholder="Household Size" value={household_size} onChange={e => setHouseholdSize(e.target.value)} />
-          <Button type="submit" className="w-full">Submit</Button>
         </form>
       </section>
 
@@ -152,7 +159,6 @@ export default function UserInput() {
           <Input type="text" placeholder="Current Prescriptions" value={current_perscriptions} onChange={e => setCurrentPrescriptions(e.target.value)} />
           <Input type="text" placeholder="Coverage Level" value={coverage_level} onChange={e => setCoverageLevel(e.target.value)} />
           <Input type="number" placeholder="Monthly Budget" value={monthly_budget} onChange={e => setMonthlyBudget(e.target.value)} />
-          <Button type="submit" className="w-full">Submit</Button>
         </form>
       </section>
 
@@ -181,7 +187,6 @@ export default function UserInput() {
             <input type="checkbox" checked={is_StudentEligible} onChange={e => setIsStudentEligible(e.target.checked)} />
             <label>Are you a Student Eligible for Insurance?</label>
           </div>
-          <Button type="submit" className="w-full">Submit</Button>
         </form>
       </section>
 
@@ -191,8 +196,14 @@ export default function UserInput() {
         <form className="max-w-md mx-auto space-y-4" onSubmit={handleSubmit}>
           <Input type="text" placeholder="Insurance Documents" value={user_insurance_docs} onChange={e => setUserInsuranceDocs(e.target.value)} />
           <Input type="text" placeholder="Proof of Income Documents" value={proof_of_income_docs} onChange={e => setProofOfIncomeDocs(e.target.value)} />
-          <Button type="submit" className="w-full">Submit</Button>
         </form>
+      </section>
+      
+      {/* Submit Button */}
+      <section>
+        <div className="flex justify-center mt-8">
+          <Button onClick={handleSubmit} className="w-full max-w-md">Submit Information</Button>
+        </div>
       </section>
     </div>
   </main>
