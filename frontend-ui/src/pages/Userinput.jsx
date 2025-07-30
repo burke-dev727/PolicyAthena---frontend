@@ -62,16 +62,33 @@ export default function UserInput() {
 
   const navigate = useNavigate();
   
-  const handleSubmit = (e) => {
+  // Function to handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can handle the collected data here (e.g., send to backend)
-    alert(`Name: ${name}\nAge: ${age}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}}\nLocation: ${location}\nZipcode: ${zipcode}\nSSN: ${ssn}`);
-    alert(`Have Insurance: ${have_insurance}\nInsurance Provider: ${insurance_provider}\nPolicy Number: ${policy_number}\nStart Date: ${start_date}\nEnd Date: ${end_date}\nSource: ${source}`);
-    alert(`Employed: ${is_employed}\nEmployer Name: ${employer_name}\nEmployer Offers Insurance: ${is_employeroffers}\nAnnual Income: ${annual_income}\nHousehold Size: ${household_size}`);
-    alert(`Coverage Type: ${coverage_type}\nProviders: ${providers}\nCurrent Conditions: ${current_conditions}\nCurrent Prescriptions: ${current_perscriptions}\nCoverage Level: ${coverage_level}\nMonthly Budget: ${monthly_budget}`);
-    alert(`US Citizen: ${is_US_Citizen}\nMedicaid: ${is_Mediaid}\nMedicare: ${is_Medicare}\nRecent Events: ${recent_events}\nVeteran: ${is_Veteran}\nStudent Eligible: ${is_StudentEligible}`);
-    alert(`Insurance Docs: ${user_insurance_docs}\nProof of Income Docs: ${proof_of_income_docs}`);
-  };
+
+    const data = {
+      name, age, email, phone, address, location, zipcode, ssn,
+      have_insurance, insurance_provider, policy_number, start_date, end_date, source,
+      is_employed, employer_name, is_employeroffers, annual_income, household_size,
+      coverage_type, providers, current_conditions, current_perscriptions, coverage_level, monthly_budget,
+      is_US_Citizen, is_Mediaid, is_Medicare, recent_events, is_Veteran, is_StudentEligible,
+    };
+
+    const response = await fetch('http://localhost:8000/userInput/profile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+      if (result.error) {
+        alert("Submission failed: " + result.error);
+        // Optionally, highlight the fields or scroll to the first error
+      } else {
+        alert('Data submitted successfully!');
+      // Optionally, redirect or clear the form
+      }
+};
 
   return (
   <main className="flex min-h-screen bg-gray-50 text-gray-800">
