@@ -58,7 +58,7 @@ export default function UserInput() {
   const [is_Veteran, setIsVeteran] = useState(false);
   const [is_StudentEligible, setIsStudentEligible] = useState(false);
 
-  // State variables for documentation
+  // State variables for User Preferences
   const [user_insurance_docs, setUserInsuranceDocs] = useState('');
   const[proof_of_income_docs, setProofOfIncomeDocs] = useState('');
 
@@ -154,7 +154,7 @@ export default function UserInput() {
             <TabsTrigger value="employment">Employment</TabsTrigger>
             <TabsTrigger value="coverage">Coverage</TabsTrigger>
             <TabsTrigger value="eligibility">Eligibility</TabsTrigger>
-            <TabsTrigger value="docs">Documents</TabsTrigger>
+            <TabsTrigger value="docs">Preferences</TabsTrigger>
           </TabsList>
 
           {/* Personal Information Submission Tab */}
@@ -162,7 +162,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Personal Information</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('insurance'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('personal'); }}>
                   <label className="block mb-1">What is your full name?</label>
                   <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is your age?</label>
@@ -192,7 +192,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Current Insurance</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('employment'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('insurancet'); }}>
                   <div className="flex items-center space-x-2 mb-2">
                     <input type="checkbox" checked={have_insurance} onChange={e => setHaveInsurance(e.target.checked)} />
                     <label>Do you have insurance?</label>
@@ -221,7 +221,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Employment Details</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('coverage'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('employment'); }}>
                   <div className="flex items-center space-x-2 mb-2">
                     <input type="checkbox" checked={is_employed} onChange={e => setIsEmployed(e.target.checked)} />
                     <label>Are you employed?</label>
@@ -250,20 +250,65 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Coverage Needs</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('eligibility'); }}>
-                  {/* Adjust the questions and in Coverage need to give the user a set of choices to select from */}
-                  <label className="block mb-1">What type of coverage do you have?</label>
-                  <Input type="text" placeholder="Coverage Type" value={coverage_type} onChange={e => setCoverageType(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">Preferred providers?</label>
-                  <Input type="text" placeholder="Providers" value={providers} onChange={e => setProviders(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">Current medical conditions?</label> 
-                  <Input type="text" placeholder="Current Conditions" value={current_conditions} onChange={e => setCurrentConditions(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">Current prescriptions?</label>
-                  <Input type="text" placeholder="Current Prescriptions" value={current_perscriptions} onChange={e => setCurrentPrescriptions(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">Desired coverage level?</label>
-                  <Input type="text" placeholder="Coverage Level" value={coverage_level} onChange={e => setCoverageLevel(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">Monthly budget?</label>
-                  <Input type="number" placeholder="Monthly Budget" value={monthly_budget} onChange={e => setMonthlyBudget(e.target.value)} className="mb-2" />
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('coverage'); }}>
+                  {/* Coverage Type: Textbox with only two valid answers */}
+                  <label className="block mb-1"> What type of coverage do you have? <span className="text-gray-500 text-sm">(Enter "individual" or "family")</span></label>
+                  <Input type="text" placeholder="individual or family" value={coverage_type} onChange={e => setCoverageType(e.target.value)} list="coverage-type-options" className="mb-2"/>
+                  <datalist id="coverage-type-options"> 
+                    <option value="individual" /> <option value="family" /> 
+                  </datalist>
+                  {/* Preferred providers: Textbox with multiple options **MAY NEED TO ADD MORE PROVIDERS AND PUT THOSE IN A SEPERATE FILE** */}
+                  <label className="block mb-1">Preferred providers? <span className="text-gray-500 text-sm">(Enter Doctor, Hospital, or Clinic)</span></label>
+                  <Input type="text" placeholder="e.g. Aetna, Cigna" value={providers} onChange={e => setProviders(e.target.value)} list="provider-options" className="mb-2"/>
+                  <datalist id="provider-options">
+                    <option value="Aetna">Aetna</option>
+                    <option value="Blue Cross Blue Shield">Blue Cross Blue Shield</option>
+                    <option value="Cigna">Cigna</option>
+                    <option value="Humana">Humana</option>
+                    <option value="Kaiser Permanente">Kaiser Permanente</option>
+                    <option value="UnitedHealthcare">UnitedHealthcare</option>
+                  </datalist>
+                  {/* Current conditions: Textbox with multiple options **ADD MORE CONDITIONS IN SEPERATE FILE** */}
+                  <label className="block mb-1">Current medical conditions? <span className="text-gray-500 text-sm">(Enter multiple conditions if needed, separated by commas (e.g. Diabetes, Asthma).)</span></label>
+                  <Input type="text" placeholder="e.g. Diabetes, Asthma" value={current_conditions} onChange={e => setCurrentConditions(e.target.value)} list="condition-options" className="mb-2"/>
+                  <datalist id="condition-options">
+                    <option value="Diabetes" />
+                    <option value="Asthma" />
+                    <option value="Hypertension" />
+                    <option value="Heart Disease" />
+                    <option value="Cancer" />
+                    <option value="Allergies" />
+                  </datalist>
+                  {/* Current perscriptions: Textbox with multiple options **ADD MORE PERSCRIPTIONS IN SEPERATE FILE** */}
+                  <label className="block mb-1">Current prescriptions? <span className="text-gray-500 text-sm">(Enter multiple perscriptions if needed, separated by commas (e.g. Metformin, Albuterol))</span></label>
+                  <Input type="text" placeholder="e.g. Metformin, Lisinopril" value={current_perscriptions} onChange={e => setCurrentPrescriptions(e.target.value)} list="prescription-options" className="mb-2"/>
+                  <datalist id="prescription-options">
+                    <option value="Metformin" />
+                    <option value="Lisinopril" />
+                    <option value="Atorvastatin" />
+                    <option value="Albuterol" />
+                    <option value="Levothyroxine" />
+                    <option value="Omeprazole" />
+                  </datalist>
+                  {/* Coverage Level: Textbox with four options */}
+                  <label className="block mb-1">Desired coverage level? <span className="text-gray-500 text-sm">(Enter bronze, silver, gold, or platinum)</span></label>
+                  <Input type="text" placeholder="Coverage Level" value={coverage_level} onChange={e => setCoverageLevel(e.target.value)} list="coverage_level_options" className="mb-2"/>
+                  <datalist id="coverage_level_options">
+                    <option value="bronze" />
+                    <option value="silver" />
+                    <option value="gold" />
+                    <option value="platinum" />
+                  </datalist>
+                  {/* Monthly Budget: A specific Range */}
+                  <label className="block mb-1">Monthly budget? <span className="text-gray-500 text-sm">(Enter a set range of your budget)</span></label>
+                  <Input type="text" placeholder="Monthly Budget" value={monthly_budget} onChange={e => setMonthlyBudget(e.target.value)} list="budget_options" className="mb-2"/>
+                  <datalist id="budget_options">
+                    <option value="below $100" />
+                    <option value="$100-$300" />
+                    <option value="$300-$500" />
+                    <option value="$500-$1000" />
+                    <option value="above $1000" />
+                  </datalist>
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('employment')}>Back</Button>
                     <Button type="submit">Next</Button>
@@ -273,12 +318,12 @@ export default function UserInput() {
             </Card>
           </TabsContent>
 
-          {/* Eligibility Details Submission Tab **DO A YES OR NO AFTER EACH QUESTION** */}
+          {/* Eligibility Details Submission Tab **DO A YES OR NO AFTER EACH QUESTION INSTEAD OF CHECKBOXES** */}
           <TabsContent value="eligibility">
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Eligibility Details</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('docs'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('eligibility'); }}>
                   <div className="flex items-center space-x-2 mb-2">
                     <input type="checkbox" checked={is_US_Citizen} onChange={e => setIsUSCitizen(e.target.checked)} />
                     <label>Are you a US Citizen?</label>
@@ -310,11 +355,11 @@ export default function UserInput() {
             </Card>
           </TabsContent>
 
-          {/* Documents Submission Tab */}
+          {/* User Preference Submission Tab **ADD MORE QUESTIONS** */}
           <TabsContent value="docs">
             <Card>
               <CardContent className="space-y-4 py-6">
-                <h2 className="text-xl font-semibold mb-4 text-center">Documents</h2>
+                <h2 className="text-xl font-semibold mb-4 text-center">Preferences</h2>
                 <form onSubmit={handleSubmit}>
                   <label className="block mb-1">Upload insurance documents:</label>
                   <Input type="text" placeholder="Insurance Documents" value={user_insurance_docs} onChange={e => setUserInsuranceDocs(e.target.value)} className="mb-2" />
