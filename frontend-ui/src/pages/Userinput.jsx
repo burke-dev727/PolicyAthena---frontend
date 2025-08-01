@@ -62,13 +62,16 @@ export default function UserInput() {
   const [user_insurance_docs, setUserInsuranceDocs] = useState('');
   const[proof_of_income_docs, setProofOfIncomeDocs] = useState('');
 
+  // Navigation hook
   const navigate = useNavigate();
+  // State variable for active tab
   const [activeTab, setActiveTab] = useState('personal');
   
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate required fields
     const data = {
       name, age, email, phone, address, location, zipcode, ssn,
       have_insurance, insurance_provider, policy_number, start_date, end_date, source,
@@ -77,12 +80,14 @@ export default function UserInput() {
       is_US_Citizen, is_Mediaid, is_Medicare, recent_events, is_Veteran, is_StudentEligible,
     };
 
+    // Check for required fields
     const response = await fetch('http://localhost:8000/userInput/profile', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
 
+    // Handle the response
     const result = await response.json();
       if (result.error) {
         alert("Submission failed: " + result.error);
@@ -129,10 +134,10 @@ export default function UserInput() {
     setProofOfIncomeDocs('');
   };
 
-  // Adjust the questions and in Coverage need to give the user a set of choices to select from
+
   return (
     <main className="flex min-h-screen bg-gray-50 text-gray-800">
-      {/* Sidebar */}
+      {/* Sidebar to Navigate Between Pages */}
       <aside className="w-64 bg-white p-6 border-r border-gray-200 shadow-md">
         <h2 className="text-2xl font-bold mb-8">PolicyAthena</h2>
         <nav className="flex flex-col space-y-3">
@@ -163,14 +168,19 @@ export default function UserInput() {
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Personal Information</h2>
                 <form onSubmit={e => { e.preventDefault(); setActiveTab('personal'); }}>
+                  {/* Name Question */}
                   <label className="block mb-1">What is your full name?</label>
                   <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="mb-2" />
+                  {/* Age Question */}
                   <label className="block mb-1">What is your age?</label>
                   <Input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="mb-2" />
+                  {/* Email Question */}
                   <label className="block mb-1">What is your email address?</label>
                   <Input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="mb-2" />
+                  {/* Phone Number Question */}
                   <label className="block mb-1">What is your phone number?</label>
                   <Input type="text" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} className="mb-2" />
+                  {/* Address, Location, Zipcode, and SSN Questions */}
                   <label className="block mb-1">What is your address?</label>
                   <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is your location (City, State)?</label>
@@ -179,6 +189,7 @@ export default function UserInput() {
                   <Input type="text" placeholder="Zipcode" value={zipcode} onChange={e => setZipcode(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is your Social Security Number?</label>
                   <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} className="mb-2" />
+                  {/* Navigation Buttons */}
                   <div className="flex justify-end">
                     <Button type="submit">Next</Button>
                   </div>
@@ -202,16 +213,21 @@ export default function UserInput() {
                       </label>
                     </div>
                   </label>
+                  {/* Insurance Provider Questions */}
                   <label className="block mb-1">Who is your insurance provider?</label>
                   <Input type="text" placeholder="Insurance Provider" value={insurance_provider} onChange={e => setProviderInsurance(e.target.value)} className="mb-2" />
+                  {/* Policy Number Question */}
                   <label className="block mb-1">What is your policy number?</label>
                   <Input type="text" placeholder="Policy Number" value={policy_number} onChange={e => setPolicyNumber(e.target.value)} className="mb-2" />
+                  {/* Start Date and End Date Questions */}
                   <label className="block mb-1">What is the start date of your coverage?</label>
                   <Input type="date" placeholder="Start Date" value={start_date} onChange={e => setStartDate(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is the end date of your coverage?</label>
                   <Input type="date" placeholder="End Date" value={end_date} onChange={e => setEndDate(e.target.value)} className="mb-2" />
+                  {/* Source of Insurance Question */}
                   <label className="block mb-1">What is the source of your insurance?</label>
                   <Input type="text" placeholder="Source" value={source} onChange={e => setSource(e.target.value)} className="mb-2" />
+                  {/* Navigation Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('personal')}>Back</Button>
                     <Button type="submit">Next</Button>
@@ -236,6 +252,7 @@ export default function UserInput() {
                       </label>
                     </div>
                   </label>
+                  {/* Employer Name Question */}
                   <label className="block mb-1">What is your employer's name?</label>
                   <Input type="text" placeholder="Employer Name" value={employer_name} onChange={e => setEmployerName(e.target.value)} className="mb-2" />
                   {/* Employer Offers Insurance Yes/No Question */}
@@ -247,10 +264,12 @@ export default function UserInput() {
                       </label>
                     </div>
                   </label>
+                  {/* Annual Income and Household Size Questions */}
                   <label className="block mb-1">What is your annual income?</label>
                   <Input type="number" placeholder="Annual Income" value={annual_income} onChange={e => setAnnualIncome(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is your household size?</label>
                   <Input type="number" placeholder="Household Size" value={household_size} onChange={e => setHouseholdSize(e.target.value)} className="mb-2" />
+                  {/* Navigation Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('insurance')}>Back</Button>
                     <Button type="submit">Next</Button>
@@ -324,6 +343,7 @@ export default function UserInput() {
                     <option value="$500-$1000" />
                     <option value="above $1000" />
                   </datalist>
+                  {/* Navigation Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('employment')}>Back</Button>
                     <Button type="submit">Next</Button>
@@ -384,7 +404,7 @@ export default function UserInput() {
                       </label>
                     </div>
                   </label>
-                  {/* Submit Button */}
+                  {/* Navigation Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('coverage')}>Back</Button>
                     <Button type="submit">Next</Button>
@@ -400,10 +420,13 @@ export default function UserInput() {
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Preferences</h2>
                 <form onSubmit={handleSubmit}>
+                  {/* Upload Insurance Documents */}
                   <label className="block mb-1">Upload insurance documents:</label>
                   <Input type="text" placeholder="Insurance Documents" value={user_insurance_docs} onChange={e => setUserInsuranceDocs(e.target.value)} className="mb-2" />
+                  {/* Upload Proof of Income Documents */}
                   <label className="block mb-1">Upload proof of income documents:</label>
                   <Input type="text" placeholder="Proof of Income Documents" value={proof_of_income_docs} onChange={e => setProofOfIncomeDocs(e.target.value)} className="mb-2" />
+                  {/* Navigation, Submit, and Reset Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('eligibility')}>Back</Button>
                     <Button type="submit">Submit Information</Button>
