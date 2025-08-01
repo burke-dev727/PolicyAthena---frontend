@@ -157,7 +157,7 @@ export default function UserInput() {
             <TabsTrigger value="docs">Preferences</TabsTrigger>
           </TabsList>
 
-          {/* Personal Information Submission Tab */}
+          {/* Personal Information Submission Tab MOVE */}
           <TabsContent value="personal">
             <Card>
               <CardContent className="space-y-4 py-6">
@@ -192,11 +192,16 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Current Insurance</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('insurancet'); }}>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <input type="checkbox" checked={have_insurance} onChange={e => setHaveInsurance(e.target.checked)} />
-                    <label>Do you have insurance?</label>
-                  </div>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('insurance'); }}>
+                  {/* Have Insurance Yes/No Question */}
+                  <label className="block mb-1">Do you currently have insurance?
+                    <div className="flex space-x-4 mb-2">
+                      <label>
+                        <input type="radio" name="have_insurance" checked={have_insurance === true} onChange={() => setHaveInsurance(true)} /> Yes
+                        <input type="radio" name="have_insurance" checked={have_insurance === false} onChange={() => setHaveInsurance(false)} /> No
+                      </label>
+                    </div>
+                  </label>
                   <label className="block mb-1">Who is your insurance provider?</label>
                   <Input type="text" placeholder="Insurance Provider" value={insurance_provider} onChange={e => setProviderInsurance(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is your policy number?</label>
@@ -216,22 +221,32 @@ export default function UserInput() {
             </Card>
           </TabsContent>
 
-          {/* Employment Details Submission Tab */}
+          {/* Employment Details Submission Tab MOVE*/}
           <TabsContent value="employment">
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Employment Details</h2>
                 <form onSubmit={e => { e.preventDefault(); setActiveTab('employment'); }}>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <input type="checkbox" checked={is_employed} onChange={e => setIsEmployed(e.target.checked)} />
-                    <label>Are you employed?</label>
-                  </div>
+                  {/* Employed Yes/No Question */}
+                  <label className="block mb-1">Are you currently employed?
+                    <div className="flex space-x-4 mb-2">
+                      <label>
+                        <input type="radio" name="is_emplyed" checked={is_employed === true} onChange={() => setIsEmployed(true)} /> Yes
+                        <input type="radio" name="is_employed" checked={is_employed === false} onChange={() => setIsEmployed(false)} /> No
+                      </label>
+                    </div>
+                  </label>
                   <label className="block mb-1">What is your employer's name?</label>
                   <Input type="text" placeholder="Employer Name" value={employer_name} onChange={e => setEmployerName(e.target.value)} className="mb-2" />
-                  <div className="flex items-center space-x-2 mb-2">
-                    <input type="checkbox" checked={is_employeroffers} onChange={e => setIsEmployerOffers(e.target.checked)} />
-                    <label>Does your employer offer insurance?</label>
-                  </div>
+                  {/* Employer Offers Insurance Yes/No Question */}
+                  <label className="block mb-1">Does your employer offer insurance?
+                    <div className="flex space-x-4 mb-2">
+                      <label>
+                        <input type="radio" name="is_employeroffers" checked={is_employeroffers === true} onChange={() => setIsEmployerOffers(true)} /> Yes
+                        <input type="radio" name="is_employeroffers" checked={is_employeroffers === false} onChange={() => setIsEmployerOffers(false)} /> No
+                      </label>
+                    </div>
+                  </label>
                   <label className="block mb-1">What is your annual income?</label>
                   <Input type="number" placeholder="Annual Income" value={annual_income} onChange={e => setAnnualIncome(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is your household size?</label>
@@ -324,28 +339,52 @@ export default function UserInput() {
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Eligibility Details</h2>
                 <form onSubmit={e => { e.preventDefault(); setActiveTab('eligibility'); }}>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <input type="checkbox" checked={is_US_Citizen} onChange={e => setIsUSCitizen(e.target.checked)} />
-                    <label>Are you a US Citizen?</label>
-                  </div>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <input type="checkbox" checked={is_Mediaid} onChange={e => setIsMedicaid(e.target.checked)} />
-                    <label>Are you eligible for Medicaid?</label>
-                  </div>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <input type="checkbox" checked={is_Medicare} onChange={e => setIsMedicare(e.target.checked)} />
-                    <label>Are you eligible for Medicare?</label>
-                  </div>
-                  <label className="block mb-1">List any recent events (e.g. lost job, moved, etc):</label>
+                  {/* US Citizen Yes/No Question */}
+                  <label className="block mb-1">Are you a US Citizen?</label>
+                    <div className="flex space-x-4 mb-2">
+                      <label>
+                        <input type="radio" name="us_citizen" checked={is_US_Citizen === true} onChange={() => setIsUSCitizen(true)} /> Yes
+                        <input type="radio" name="us_citizen" checked={is_US_Citizen === false} onChange={() => setIsUSCitizen(false)} /> No
+                      </label>
+                    </div>
+                  {/* Medicaid Yes/No Question */}
+                  <label className="block mb-1">Are you eligible for Medicaid?</label>
+                    <div className="flex space-x-4 mb-2">
+                      <label>
+                        <input type="radio" name="medicaid" checked={is_Mediaid === true} onChange={() => setIsMedicaid(true)} /> Yes
+                        <input type="radio" name="medicaid" checked={is_Mediaid === false} onChange={() => setIsMedicaid(false)} /> No
+                      </label>
+                    </div>
+                  {/* Medicare Yes/No Question */}
+                  <label className="block mb-1">Are you eligible for Medicare?</label>
+                    <div className="flex space-x-4 mb-2">
+                      <label>
+                        <input type="radio" name="medicare" checked={is_Medicare === true} onChange={() => setIsMedicare(true)} /> Yes
+                        <input type="radio" name="medicare" checked={is_Medicare === false} onChange={() => setIsMedicare(false)} /> No
+                      </label>
+                    </div>
+                  {/* Recent Events Textbox */}
+                  <label className="block mb-1">List any recent events (e.g. surgery, 2023-12-01 etc):</label>
                   <Input type="text" placeholder="Recent Events" value={recent_events} onChange={e => setRecentEvents(e.target.value)} className="mb-2" />
-                  <div className="flex items-center space-x-2 mb-2">
-                    <input type="checkbox" checked={is_Veteran} onChange={e => setIsVeteran(e.target.checked)} />
-                    <label>Are you a Veteran?</label>
-                  </div>
-                  <div className="flex items-center space-x-2 mb-2">
-                    <input type="checkbox" checked={is_StudentEligible} onChange={e => setIsStudentEligible(e.target.checked)} />
-                    <label>Are you a Student Eligible for Insurance?</label>
-                  </div>
+                  {/* Veteran Yes/No Question */}
+                  <label className="block mb-1">Are you a Veteran?
+                    <div className="flex space-x-4 mb-2">
+                      <label>
+                        <input type="radio" name="veteran" checked={is_Veteran === true} onChange={() => setIsVeteran(true)} /> Yes
+                        <input type="radio" name="veteran" checked={is_Veteran === false} onChange={() => setIsVeteran(false)} /> No
+                      </label>
+                    </div>
+                  </label>
+                  {/* Student Eligible for Insurance Yes/No Question */}
+                  <label className="block mb-1">Are you a Student Eligible for Insurance?
+                    <div className="flex space-x-4 mb-2">
+                      <label>
+                        <input type="radio" name="student_eligible" checked={is_StudentEligible === true} onChange={() => setIsStudentEligible(true)} /> Yes
+                        <input type="radio" name="student_eligible" checked={is_StudentEligible === false} onChange={() => setIsStudentEligible(false)} /> No
+                      </label>
+                    </div>
+                  </label>
+                  {/* Submit Button */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('coverage')}>Back</Button>
                     <Button type="submit">Next</Button>
@@ -355,7 +394,7 @@ export default function UserInput() {
             </Card>
           </TabsContent>
 
-          {/* User Preference Submission Tab **ADD MORE QUESTIONS** */}
+          {/* User Preference Submission Tab **ADD MORE QUESTIONS FOR SPECIAL CONCERNS or Preferences** */}
           <TabsContent value="docs">
             <Card>
               <CardContent className="space-y-4 py-6">
