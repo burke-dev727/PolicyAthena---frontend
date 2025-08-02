@@ -129,6 +129,58 @@ export default function UserInput() {
     setProofOfIncomeDocs('');
   };
 
+  // Individual section reset functions
+  const resetPersonal = () => {
+    setName('');
+    setAge('');
+    setEmail('');
+    setPhone('');
+    setAddress('');
+    setLocation('');
+    setZipcode('');
+    setSocialSecurity('');
+  };
+
+  const resetInsurance = () => {
+    setHaveInsurance(false);
+    setProviderInsurance('');
+    setPolicyNumber('');
+    setStartDate('');
+    setEndDate('');
+    setSource('');
+  };
+
+  const resetEmployment = () => {
+    setIsEmployed(false);
+    setEmployerName('');
+    setIsEmployerOffers(false);
+    setAnnualIncome('');
+    setHouseholdSize('');
+  };
+
+  const resetCoverage = () => {
+    setCoverageType('');
+    setProviders('');
+    setCurrentConditions('');
+    setCurrentPrescriptions('');
+    setCoverageLevel('');
+    setMonthlyBudget('');
+  };
+
+  const resetEligibility = () => {
+    setIsUSCitizen(false);
+    setIsMedicaid(false);
+    setIsMedicare(false);
+    setRecentEvents('');
+    setIsVeteran(false);
+    setIsStudentEligible(false);
+  };
+
+  const resetPreferences = () => {
+    setUserInsuranceDocs('');
+    setProofOfIncomeDocs('');
+  };
+
   // Adjust the questions and in Coverage need to give the user a set of choices to select from
   return (
     <main className="flex min-h-screen bg-gray-50 text-gray-800">
@@ -162,26 +214,27 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Personal Information</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('personal'); }}>
-                  <label className="block mb-1">What is your full name?</label>
-                  <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your age?</label>
-                  <Input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your email address?</label>
-                  <Input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your phone number?</label>
-                  <Input type="text" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your address?</label>
-                  <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your location (City, State)?</label>
-                  <Input type="text" placeholder="Location (City, State)" value={location} onChange={e => setLocation(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your zipcode?</label>
-                  <Input type="text" placeholder="Zipcode" value={zipcode} onChange={e => setZipcode(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your Social Security Number?</label>
-                  <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} className="mb-2" />
-                  <div className="flex justify-end">
-                    <Button type="submit">Next</Button>
-                  </div>
+                                 <form onSubmit={e => { e.preventDefault(); setActiveTab('insurance'); }}>
+                   <label className="block mb-1">What is your full name?</label>
+                   <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="mb-2" />
+                   <label className="block mb-1">What is your age?</label>
+                   <Input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="mb-2" />
+                   <label className="block mb-1">What is your email address?</label>
+                   <Input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="mb-2" />
+                   <label className="block mb-1">What is your phone number?</label>
+                   <Input type="text" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} className="mb-2" />
+                   <label className="block mb-1">What is your address?</label>
+                   <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className="mb-2" />
+                   <label className="block mb-1">What is your location (City, State)?</label>
+                   <Input type="text" placeholder="Location (City, State)" value={location} onChange={e => setLocation(e.target.value)} className="mb-2" />
+                   <label className="block mb-1">What is your zipcode?</label>
+                   <Input type="text" placeholder="Zipcode" value={zipcode} onChange={e => setZipcode(e.target.value)} className="mb-2" />
+                   <label className="block mb-1">What is your Social Security Number?</label>
+                   <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} className="mb-2" />
+                   <div className="flex justify-between">
+                     <Button type="button" variant="outline" onClick={resetPersonal}>Reset Section</Button>
+                     <Button type="submit">Next</Button>
+                   </div>
                 </form>
               </CardContent>
             </Card>
@@ -192,7 +245,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Current Insurance</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('insurancet'); }}>
+                                 <form onSubmit={e => { e.preventDefault(); setActiveTab('employment'); }}>
                   <div className="flex items-center space-x-2 mb-2">
                     <input type="checkbox" checked={have_insurance} onChange={e => setHaveInsurance(e.target.checked)} />
                     <label>Do you have insurance?</label>
@@ -207,10 +260,11 @@ export default function UserInput() {
                   <Input type="date" placeholder="End Date" value={end_date} onChange={e => setEndDate(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is the source of your insurance?</label>
                   <Input type="text" placeholder="Source" value={source} onChange={e => setSource(e.target.value)} className="mb-2" />
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('personal')}>Back</Button>
-                    <Button type="submit">Next</Button>
-                  </div>
+                                     <div className="flex justify-between">
+                     <Button type="button" variant="outline" onClick={() => setActiveTab('personal')}>Back</Button>
+                     <Button type="button" variant="outline" onClick={resetInsurance}>Reset Section</Button>
+                     <Button type="submit">Next</Button>
+                   </div>
                 </form>
               </CardContent>
             </Card>
@@ -221,7 +275,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Employment Details</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('employment'); }}>
+                                 <form onSubmit={e => { e.preventDefault(); setActiveTab('coverage'); }}>
                   <div className="flex items-center space-x-2 mb-2">
                     <input type="checkbox" checked={is_employed} onChange={e => setIsEmployed(e.target.checked)} />
                     <label>Are you employed?</label>
@@ -236,10 +290,11 @@ export default function UserInput() {
                   <Input type="number" placeholder="Annual Income" value={annual_income} onChange={e => setAnnualIncome(e.target.value)} className="mb-2" />
                   <label className="block mb-1">What is your household size?</label>
                   <Input type="number" placeholder="Household Size" value={household_size} onChange={e => setHouseholdSize(e.target.value)} className="mb-2" />
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('insurance')}>Back</Button>
-                    <Button type="submit">Next</Button>
-                  </div>
+                                     <div className="flex justify-between">
+                     <Button type="button" variant="outline" onClick={() => setActiveTab('insurance')}>Back</Button>
+                     <Button type="button" variant="outline" onClick={resetEmployment}>Reset Section</Button>
+                     <Button type="submit">Next</Button>
+                   </div>
                 </form>
               </CardContent>
             </Card>
@@ -250,7 +305,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Coverage Needs</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('coverage'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('eligibility'); }}>
                   {/* Coverage Type: Textbox with only two valid answers */}
                   <label className="block mb-1"> What type of coverage do you have? <span className="text-gray-500 text-sm">(Enter "individual" or "family")</span></label>
                   <Input type="text" placeholder="individual or family" value={coverage_type} onChange={e => setCoverageType(e.target.value)} list="coverage-type-options" className="mb-2"/>
@@ -309,10 +364,11 @@ export default function UserInput() {
                     <option value="$500-$1000" />
                     <option value="above $1000" />
                   </datalist>
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('employment')}>Back</Button>
-                    <Button type="submit">Next</Button>
-                  </div>
+                                     <div className="flex justify-between">
+                     <Button type="button" variant="outline" onClick={() => setActiveTab('employment')}>Back</Button>
+                     <Button type="button" variant="outline" onClick={resetCoverage}>Reset Section</Button>
+                     <Button type="submit">Next</Button>
+                   </div>
                 </form>
               </CardContent>
             </Card>
@@ -323,7 +379,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Eligibility Details</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('eligibility'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('docs'); }}>
                   <div className="flex items-center space-x-2 mb-2">
                     <input type="checkbox" checked={is_US_Citizen} onChange={e => setIsUSCitizen(e.target.checked)} />
                     <label>Are you a US Citizen?</label>
@@ -346,10 +402,11 @@ export default function UserInput() {
                     <input type="checkbox" checked={is_StudentEligible} onChange={e => setIsStudentEligible(e.target.checked)} />
                     <label>Are you a Student Eligible for Insurance?</label>
                   </div>
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('coverage')}>Back</Button>
-                    <Button type="submit">Next</Button>
-                  </div>
+                                     <div className="flex justify-between">
+                     <Button type="button" variant="outline" onClick={() => setActiveTab('coverage')}>Back</Button>
+                     <Button type="button" variant="outline" onClick={resetEligibility}>Reset Section</Button>
+                     <Button type="submit">Next</Button>
+                   </div>
                 </form>
               </CardContent>
             </Card>
@@ -365,11 +422,12 @@ export default function UserInput() {
                   <Input type="text" placeholder="Insurance Documents" value={user_insurance_docs} onChange={e => setUserInsuranceDocs(e.target.value)} className="mb-2" />
                   <label className="block mb-1">Upload proof of income documents:</label>
                   <Input type="text" placeholder="Proof of Income Documents" value={proof_of_income_docs} onChange={e => setProofOfIncomeDocs(e.target.value)} className="mb-2" />
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('eligibility')}>Back</Button>
-                    <Button type="submit">Submit Information</Button>
-                    <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
-                  </div>
+                                     <div className="flex justify-between">
+                     <Button type="button" variant="outline" onClick={() => setActiveTab('eligibility')}>Back</Button>
+                     <Button type="button" variant="outline" onClick={resetPreferences}>Reset Section</Button>
+                     <Button type="submit">Submit Information</Button>
+                     <Button type="button" variant="outline" onClick={handleReset}>Reset All</Button>
+                   </div>
                 </form>
               </CardContent>
             </Card>
