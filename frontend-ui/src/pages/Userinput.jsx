@@ -6,6 +6,7 @@
 * Description: This component allows users to input their personal information, current insurance details, employment details, coverage needs, eligibility details, and documentation for insurance matching.
 * It includes forms for each section and handles the submission of user data.
 * Notes: Potentially edit the input data or add more fields in the future.
+* Updated by Xinrui Hou 2025-08-02, add reset functions and fixed the reset button.
 */
 
 import { useState } from 'react';
