@@ -2,10 +2,10 @@
 * File: UserInput.jsx
 * Author: James Zheng
 * Date: 2025-07-15
-* Updated: 2025-07-29
+* Updated: 2025-08-01
 * Description: This component allows users to input their personal information, current insurance details, employment details, coverage needs, eligibility details, and documentation for insurance matching.
 * It includes forms for each section and handles the submission of user data.
-* Notes: Potentially edit the input data or add more fields in the future.
+* Notes: Potentially edit the input data or add more fields in the future. ADD more questions on Saturday
 */
 
 import { useState } from 'react';
@@ -16,17 +16,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 
 export default function UserInput() {
-  
-  // State variables for user input
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [location, setLocation] = useState('');
-  const [zipcode, setZipcode] = useState('');
-  const [ssn, setSocialSecurity] = useState('');
-
   // State variables for current insurance
   const [have_insurance, setHaveInsurance] = useState(false);
   const [insurance_provider, setProviderInsurance] = useState('');
@@ -34,13 +23,6 @@ export default function UserInput() {
   const [start_date, setStartDate] = useState('');
   const [end_date, setEndDate] = useState('');
   const [source, setSource] = useState('');
-
-  // State variables for employment details
-  const [is_employed, setIsEmployed] = useState(false);
-  const [employer_name, setEmployerName] = useState('');
-  const [is_employeroffers, setIsEmployerOffers] = useState(false);
-  const [annual_income, setAnnualIncome] = useState('');
-  const [household_size, setHouseholdSize] = useState('');
 
   // State variables for coverage needs
   const [coverage_type, setCoverageType] = useState('');
@@ -65,7 +47,7 @@ export default function UserInput() {
   // Navigation hook
   const navigate = useNavigate();
   // State variable for active tab
-  const [activeTab, setActiveTab] = useState('personal');
+  const [activeTab, setActiveTab] = useState('insurance');
   
   // Function to handle form submission
   const handleSubmit = async (e) => {
@@ -73,14 +55,15 @@ export default function UserInput() {
 
     // Validate required fields
     const data = {
-      name, age, email, phone, address, location, zipcode, ssn,
       have_insurance, insurance_provider, policy_number, start_date, end_date, source,
-      is_employed, employer_name, is_employeroffers, annual_income, household_size,
       coverage_type, providers, current_conditions, current_perscriptions, coverage_level, monthly_budget,
       is_US_Citizen, is_Mediaid, is_Medicare, recent_events, is_Veteran, is_StudentEligible,
     };
 
-    // Check for required fields
+    // Convert JSOn string for download or debugging
+    const jsonString = JSON.stringify(data, null, 2);
+    
+    // Send to Backend
     const response = await fetch('http://localhost:8000/userInput/profile', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -99,25 +82,12 @@ export default function UserInput() {
 };
   // Function to reset all form fields
   const handleReset = () => {
-    setName('');
-    setAge('');
-    setEmail('');
-    setPhone('');
-    setAddress('');
-    setLocation('');
-    setZipcode('');
-    setSocialSecurity('');
     setHaveInsurance(false);
     setProviderInsurance('');
     setPolicyNumber('');
     setStartDate('');
     setEndDate('');
     setSource('');
-    setIsEmployed(false);
-    setEmployerName('');
-    setIsEmployerOffers(false);
-    setAnnualIncome('');
-    setHouseholdSize('');
     setCoverageType('');
     setProviders('');
     setCurrentConditions('');
@@ -154,56 +124,18 @@ export default function UserInput() {
         <h1 className="text-3xl font-bold mb-8 text-center">User Input</h1>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-2xl mx-auto">
           <TabsList className="grid grid-cols-6 mb-6">
-            <TabsTrigger value="personal">Personal</TabsTrigger>
             <TabsTrigger value="insurance">Insurance</TabsTrigger>
-            <TabsTrigger value="employment">Employment</TabsTrigger>
             <TabsTrigger value="coverage">Coverage</TabsTrigger>
             <TabsTrigger value="eligibility">Eligibility</TabsTrigger>
-            <TabsTrigger value="docs">Preferences</TabsTrigger>
+            <TabsTrigger value="preferences">Preferences</TabsTrigger>
           </TabsList>
-
-          {/* Personal Information Submission Tab MOVE */}
-          <TabsContent value="personal">
-            <Card>
-              <CardContent className="space-y-4 py-6">
-                <h2 className="text-xl font-semibold mb-4 text-center">Personal Information</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('personal'); }}>
-                  {/* Name Question */}
-                  <label className="block mb-1">What is your full name?</label>
-                  <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="mb-2" />
-                  {/* Age Question */}
-                  <label className="block mb-1">What is your age?</label>
-                  <Input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="mb-2" />
-                  {/* Email Question */}
-                  <label className="block mb-1">What is your email address?</label>
-                  <Input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="mb-2" />
-                  {/* Phone Number Question */}
-                  <label className="block mb-1">What is your phone number?</label>
-                  <Input type="text" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} className="mb-2" />
-                  {/* Address, Location, Zipcode, and SSN Questions */}
-                  <label className="block mb-1">What is your address?</label>
-                  <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your location (City, State)?</label>
-                  <Input type="text" placeholder="Location (City, State)" value={location} onChange={e => setLocation(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your zipcode?</label>
-                  <Input type="text" placeholder="Zipcode" value={zipcode} onChange={e => setZipcode(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your Social Security Number?</label>
-                  <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} className="mb-2" />
-                  {/* Navigation Buttons */}
-                  <div className="flex justify-end">
-                    <Button type="submit">Next</Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* Current Insurance Submission Tab*/}
           <TabsContent value="insurance">
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Current Insurance</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('insurance'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('coverage'); }}>
                   {/* Have Insurance Yes/No Question */}
                   <label className="block mb-1">Do you currently have insurance?
                     <div className="flex space-x-4 mb-2">
@@ -228,50 +160,7 @@ export default function UserInput() {
                   <label className="block mb-1">What is the source of your insurance?</label>
                   <Input type="text" placeholder="Source" value={source} onChange={e => setSource(e.target.value)} className="mb-2" />
                   {/* Navigation Buttons */}
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('personal')}>Back</Button>
-                    <Button type="submit">Next</Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Employment Details Submission Tab MOVE*/}
-          <TabsContent value="employment">
-            <Card>
-              <CardContent className="space-y-4 py-6">
-                <h2 className="text-xl font-semibold mb-4 text-center">Employment Details</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('employment'); }}>
-                  {/* Employed Yes/No Question */}
-                  <label className="block mb-1">Are you currently employed?
-                    <div className="flex space-x-4 mb-2">
-                      <label>
-                        <input type="radio" name="is_emplyed" checked={is_employed === true} onChange={() => setIsEmployed(true)} /> Yes
-                        <input type="radio" name="is_employed" checked={is_employed === false} onChange={() => setIsEmployed(false)} /> No
-                      </label>
-                    </div>
-                  </label>
-                  {/* Employer Name Question */}
-                  <label className="block mb-1">What is your employer's name?</label>
-                  <Input type="text" placeholder="Employer Name" value={employer_name} onChange={e => setEmployerName(e.target.value)} className="mb-2" />
-                  {/* Employer Offers Insurance Yes/No Question */}
-                  <label className="block mb-1">Does your employer offer insurance?
-                    <div className="flex space-x-4 mb-2">
-                      <label>
-                        <input type="radio" name="is_employeroffers" checked={is_employeroffers === true} onChange={() => setIsEmployerOffers(true)} /> Yes
-                        <input type="radio" name="is_employeroffers" checked={is_employeroffers === false} onChange={() => setIsEmployerOffers(false)} /> No
-                      </label>
-                    </div>
-                  </label>
-                  {/* Annual Income and Household Size Questions */}
-                  <label className="block mb-1">What is your annual income?</label>
-                  <Input type="number" placeholder="Annual Income" value={annual_income} onChange={e => setAnnualIncome(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your household size?</label>
-                  <Input type="number" placeholder="Household Size" value={household_size} onChange={e => setHouseholdSize(e.target.value)} className="mb-2" />
-                  {/* Navigation Buttons */}
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('insurance')}>Back</Button>
+                  <div className="flex justify-end">
                     <Button type="submit">Next</Button>
                   </div>
                 </form>
@@ -284,7 +173,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Coverage Needs</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('coverage'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('eligibility'); }}>
                   {/* Coverage Type: Textbox with only two valid answers */}
                   <label className="block mb-1"> What type of coverage do you have? <span className="text-gray-500 text-sm">(Enter "individual" or "family")</span></label>
                   <Input type="text" placeholder="individual or family" value={coverage_type} onChange={e => setCoverageType(e.target.value)} list="coverage-type-options" className="mb-2"/>
@@ -345,7 +234,7 @@ export default function UserInput() {
                   </datalist>
                   {/* Navigation Buttons */}
                   <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('employment')}>Back</Button>
+                    <Button type="button" variant="outline" onClick={() => setActiveTab('insurance')}>Back</Button>
                     <Button type="submit">Next</Button>
                   </div>
                 </form>
@@ -358,7 +247,7 @@ export default function UserInput() {
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Eligibility Details</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('eligibility'); }}>
+                <form onSubmit={e => { e.preventDefault(); setActiveTab('preferences'); }}>
                   {/* US Citizen Yes/No Question */}
                   <label className="block mb-1">Are you a US Citizen?</label>
                     <div className="flex space-x-4 mb-2">
@@ -415,7 +304,7 @@ export default function UserInput() {
           </TabsContent>
 
           {/* User Preference Submission Tab **ADD MORE QUESTIONS FOR SPECIAL CONCERNS or Preferences** */}
-          <TabsContent value="docs">
+          <TabsContent value="preferences">
             <Card>
               <CardContent className="space-y-4 py-6">
                 <h2 className="text-xl font-semibold mb-4 text-center">Preferences</h2>
