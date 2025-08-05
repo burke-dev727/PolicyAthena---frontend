@@ -2,8 +2,11 @@
  * File: UserProfile.jsx
  * Author: Name & James Zheng
  * Date: 2025-07-29
- * Description: This is the user profile component for the PolicyAthena frontend. It includes a sidebar for navigation and a main content area for user profile details.
- * This file defines the User Profile page layout and navigation.
+ * Updated: 2025-08-05
+ * Description: This is the user profile component for the PolicyAthena frontend. It includes a sidebar for navigation and a main content area for user profile details. This file defines the User Profile page layout and navigation.
+ * Changes:
+ * - Added a way to put data into a JSON file to import to backend
+ * - Added an alert when user submits their data for debugging.
  */
 
 import { useState } from 'react';
@@ -23,7 +26,6 @@ export default function UserProfile() {
     const [location, setLocation] = useState('');
     const [zipcode, setZipcode] = useState('');
     const [ssn, setSocialSecurity] = useState('');
-    const navigate = useNavigate();
 
     // State variables for employment details
     const [is_employed, setIsEmployed] = useState(false);
@@ -32,6 +34,8 @@ export default function UserProfile() {
     const [annual_income, setAnnualIncome] = useState('');
     const [household_size, setHouseholdSize] = useState('');
 
+    // Navigate across pages
+    const navigate = useNavigate();
 
     // State variable for active tab
     const [activeTab, setActiveTab] = useState('personal');
@@ -46,8 +50,21 @@ export default function UserProfile() {
             is_employed, employer_name, is_employeroffers, annual_income, household_size,
         };
 
-        // Convert JSOn string for download or debugging
+        // Convert to JSON string
         const jsonString = JSON.stringify(data, null, 2);
+
+        // Create and trigger file download
+        const blob = new Blob([jsonString], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'userprofile_answers_data.json';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    
+        alert('Data has been saved as a JSON file');
     
         // Send to Backend
         const response = await fetch('http://localhost:8000/userInput/profile', {
@@ -82,6 +99,12 @@ export default function UserProfile() {
     setAnnualIncome('');
     setHouseholdSize('');
   };
+
+  // Alert input variables
+  const submitClick = () => {
+    alert(`PERSONAL INFORMATION\nName: ${name}\nAge: ${age}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}\nLocation: ${location}\nZipcode: ${zipcode}\nSocialSecurity: ${ssn}
+      \nEMPLOYMENT DETAILS\nIs Employed: ${is_employed}\nEmployer Name: ${employer_name}\nEmployer Offers: ${is_employeroffers}\nAnnual Income: ${annual_income}\nHousehold Size: ${household_size}`);
+  }
   return (
     <main className="flex min-h-screen bg-gray-50 text-gray-800">
       {/* Sidebar to Navigate Between Pages */}
@@ -98,7 +121,7 @@ export default function UserProfile() {
 
       {/* Main Content */}
       <div className="flex-1 p-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center">User Input</h1>
+        <h1 className="text-3xl font-bold mb-8 text-center">User Profile</h1>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-2xl mx-auto">
           <TabsList className="grid grid-cols-6 mb-6">
             <TabsTrigger value="personal">Personal</TabsTrigger>
@@ -177,7 +200,7 @@ export default function UserProfile() {
                   {/* Navigation, Submit, and Reset Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('personal')}>Back</Button>
-                    <Button type="submit">Submit Information</Button>
+                    <Button type="submit" onClick={submitClick}>Submit Information</Button>
                     <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
                   </div>
                 </form>

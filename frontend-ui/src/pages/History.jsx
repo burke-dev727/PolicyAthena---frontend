@@ -2,7 +2,7 @@
  * File: History.jsx
  * Author: Name & James Zheng
  * Date: 2025-07-29
- * Description: This is the history component for the PolicyAthena frontend. It includes a sidebar for navigation and a main content area for displaying user history.
+ * Description: This may be deleted.
  */
 
 import { useState } from 'react';

@@ -2,7 +2,7 @@
  * File: Matchedplan.jsx
  * Author: Name & James Zheng
  * Date: 2025-07-29
- * Description: This is the matched plan component for the PolicyAthena frontend. It includes a sidebar for navigation and a main content area for displaying matched plans.
+ * Description: This may be deleted or combined or changed.
  */
 
 import { useState } from 'react';

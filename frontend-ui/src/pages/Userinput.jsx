@@ -1,14 +1,20 @@
 /*
 * File: UserInput.jsx
-* Author: James Zheng
+* Author: James Zheng & Xinrui Hou
 * Date: 2025-07-15
-* Updated: 2025-08-01
-* Description: This component allows users to input their personal information, current insurance details, employment details, coverage needs, eligibility details, and documentation for insurance matching.
-* It includes forms for each section and handles the submission of user data.
-* Notes: Potentially edit the input data or add more fields in the future. ADD more questions on Saturday
+* Updated: 2025-08-05
+* Description: This component allows users to input their personal information, current insurance details, employment details, coverage needs, eligibility details, and documentation for insurance matching. It includes forms for each section and handles the submission of user data.
+* Changes:
+*   - Added Multi Select in Coverage Needs Tab for questions of Providers, Conditions, Perscriptions, and Events. Alos made them arrays.
+*   - Also changed the names of 'recent_events' to 'events' for readability.
+*   - Have an alert that describes what data is inside after it is submitted.
+*   - Moved the 'Personal Information' and 'Employement' onto UserProfile.
+*   - Capitalized the options such as 'Bronze' or 'Family'
+*   - Able to download the JSON file of the userinput answers
 */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+import CreatetableSelect from 'react-select/creatable'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from "react-router-dom";
@@ -26,9 +32,9 @@ export default function UserInput() {
 
   // State variables for coverage needs
   const [coverage_type, setCoverageType] = useState('');
-  const [providers, setProviders] = useState('');
-  const [current_conditions, setCurrentConditions] = useState('');
-  const [current_perscriptions, setCurrentPrescriptions] = useState('');
+  const [providers, setProviders] = useState([]);
+  const [current_conditions, setCurrentConditions] = useState([]);
+  const [current_perscriptions, setCurrentPrescriptions] = useState([]);
   const [coverage_level, setCoverageLevel] = useState('');
   const [monthly_budget, setMonthlyBudget] = useState('');
 
@@ -36,7 +42,7 @@ export default function UserInput() {
   const [is_US_Citizen, setIsUSCitizen] = useState(false);
   const [is_Mediaid, setIsMedicaid] = useState(false);
   const [is_Medicare, setIsMedicare] = useState(false);
-  const [recent_events, setRecentEvents] = useState(''); // write out multiple events
+  const [events, setEvents] = useState([]); // write out multiple events
   const [is_Veteran, setIsVeteran] = useState(false);
   const [is_StudentEligible, setIsStudentEligible] = useState(false);
 
@@ -46,24 +52,45 @@ export default function UserInput() {
 
   // Navigation hook
   const navigate = useNavigate();
+
   // State variable for active tab
   const [activeTab, setActiveTab] = useState('insurance');
-  
+
+  // Multi-Select
+  const [selectedProviders, setSelectedProviders] = useState([]);
+  const [selectedConditions, setSelectedConditions] = useState([]);
+  const [selectedPerscriptions, setSelectedPerscriptions] = useState([]);
+  const [selectedEvents, setSelectedEvents] = useState([]);
+
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate required fields
+    // Validate required fields - Xinrui Hou
     const data = {
       have_insurance, insurance_provider, policy_number, start_date, end_date, source,
-      coverage_type, providers, current_conditions, current_perscriptions, coverage_level, monthly_budget,
-      is_US_Citizen, is_Mediaid, is_Medicare, recent_events, is_Veteran, is_StudentEligible,
+      coverage_type, providers: providers.join(', '), current_conditions: current_conditions.join(', '), current_perscriptions: current_perscriptions.join(', '), coverage_level, monthly_budget,
+      is_US_Citizen, is_Mediaid, is_Medicare, events: events.join(', '), is_Veteran, is_StudentEligible,
+      user_insurance_docs, proof_of_income_docs
     };
 
-    // Convert JSOn string for download or debugging
+    // Convert to JSON string
     const jsonString = JSON.stringify(data, null, 2);
+
+    // Create and trigger file download
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'userinput_answers_data.json';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
     
-    // Send to Backend
+    alert('Data has been saved as a JSON file');
+
+    // Send JSON file to Backend
     const response = await fetch('http://localhost:8000/userInput/profile', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -77,9 +104,9 @@ export default function UserInput() {
         // Optionally, highlight the fields or scroll to the first error
       } else {
         alert('Data submitted successfully!');
-      // Optionally, redirect or clear the form
       }
-};
+  };
+
   // Function to reset all form fields
   const handleReset = () => {
     setHaveInsurance(false);
@@ -97,13 +124,91 @@ export default function UserInput() {
     setIsUSCitizen(false);
     setIsMedicaid(false);
     setIsMedicare(false);
-    setRecentEvents('');
+    setEvents('');
     setIsVeteran(false);
     setIsStudentEligible(false);
     setUserInsuranceDocs('');
     setProofOfIncomeDocs('');
+    setSelectedProviders('');
+    setSelectedConditions('');
+    setSelectedPerscriptions('');
+    setSelectedEvents('');
   };
 
+  // Providers multi-list
+  const providerOptions =[
+    {value: "athena", label: "Athena"},
+    {value: "bluecrossblueshield", label: "Blue Cross Blue Shield"},
+    {value: "cigna", label: "Cigna"},
+    {value: "humana", label: "Humana"},
+    {value: "kaiserpermanente", label: "Kaiser Permanente"},
+    {value: "unitedhealthcare", label: "United Healthcare"},
+  ];
+
+  // Condtiions multi-list
+  const conditionOptions =[
+    {value: "hypertension", label: "Hypertension"},
+    {value: "diabetes", label: "Diabetes"},
+    {value: "mellitus", label: "Mellitus"},
+    {value: "asthma", label: "Asthma"},
+    {value: "infection", label: "Infection"},
+    {value: "obesity", label: "Obesity"},
+    {value: "congestiveheartfailure", label: "Congestive Heart Failure"},
+    {value: "cancer", label: "Cancer"},
+    {value: "other", label: "Other"},
+  ]
+
+  // Perscriptions multi-list
+  const perscriptionOptions =[
+    {value: "lisinopril", label: "Lisinopril"},
+    {value: "metformin", label: "Metformin"},
+    {value: "atorvastatin", label: "Atorvastatin"},
+    {value: "amlodipine", label: "Amlodipine"},
+    {value: "levothyroxine", label: "Levothyroxine"},
+    {value: "omeprazole", label: "Omeprazole"},
+    {value: "other", label: "Other"},
+  ]
+
+  // Events multi-list - Requires for user to input their own events and pick 'None' if there was no medical events such as surgery.
+  const eventOptions=[
+    {value: "none", label: "None"}
+  ]
+
+  // Multi-list variables storage for Providers
+  const handleChangeProviders = (selectedOptions) => {
+    setSelectedProviders(selectedOptions);
+    const values1 = selectedOptions.map(option => option.value);
+    setProviders(values1);
+  }
+
+  // Multi-list variables storage for Conditions
+  const handleChangeConditions = (selectedOptions) => {
+    setSelectedConditions(selectedOptions);
+    const values2 = selectedOptions.map(option => option.value);
+    setCurrentConditions(values2);
+  }
+
+  //Multi-list variables storage for Perscriptions
+  const handleChangePerscriptions = (selectedOptions) => {
+    setSelectedPerscriptions(selectedOptions);
+    const values3 = selectedOptions.map(option => option.value);
+    setCurrentPrescriptions(values3);
+  }
+
+  // Multi-list variables for Events
+  const handleChangeEvents = (selectedOptions) => {
+    setSelectedEvents(selectedOptions);
+    const values4 = selectedOptions.map(option => option.value);
+    setEvents(values4);
+  }
+  
+  // Alert input variables
+  const submitClick = () => {
+    alert(`CURRENT INSURNACE\nHave Insurance: ${have_insurance}\nInsurance Provider: ${insurance_provider}\nPolicy Number: ${policy_number}\nStart Date: ${start_date}\nEnd Date: ${end_date}\nSource: ${source}`)
+    alert(`COVERAGE NEEDS\nCoverage Type: ${coverage_type}\nProviders: ${providers}\nCurrent Conditions: ${current_conditions}\nCurrent Prescriptions: ${current_perscriptions}\nCoverage Level: ${coverage_level}\nMonthly Budget: ${monthly_budget}`);
+    alert(`ELIGIBILITY\nUS Citizen: ${is_US_Citizen}\nMedicaid: ${is_Mediaid}\nMedicare: ${is_Medicare}\nRecent Events: ${events}\nVeteran: ${is_Veteran}\nStudent Eligible: ${is_StudentEligible}`);
+    alert(`PREFERENCES\nInsurance Docs: ${user_insurance_docs}\nProof of Income Docs: ${proof_of_income_docs}`);
+  }
 
   return (
     <main className="flex min-h-screen bg-gray-50 text-gray-800">
@@ -178,59 +283,37 @@ export default function UserInput() {
                   <label className="block mb-1"> What type of coverage do you have? <span className="text-gray-500 text-sm">(Enter "individual" or "family")</span></label>
                   <Input type="text" placeholder="individual or family" value={coverage_type} onChange={e => setCoverageType(e.target.value)} list="coverage-type-options" className="mb-2"/>
                   <datalist id="coverage-type-options"> 
-                    <option value="individual" /> <option value="family" /> 
+                    <option value="Individual" /> 
+                    <option value="Family" /> 
                   </datalist>
-                  {/* Preferred providers: Textbox with multiple options **MAY NEED TO ADD MORE PROVIDERS AND PUT THOSE IN A SEPERATE FILE** */}
+                  {/* Preferred providers: Textbox with multiple options */}
                   <label className="block mb-1">Preferred providers? <span className="text-gray-500 text-sm">(Enter Doctor, Hospital, or Clinic)</span></label>
-                  <Input type="text" placeholder="e.g. Aetna, Cigna" value={providers} onChange={e => setProviders(e.target.value)} list="provider-options" className="mb-2"/>
-                  <datalist id="provider-options">
-                    <option value="Aetna">Aetna</option>
-                    <option value="Blue Cross Blue Shield">Blue Cross Blue Shield</option>
-                    <option value="Cigna">Cigna</option>
-                    <option value="Humana">Humana</option>
-                    <option value="Kaiser Permanente">Kaiser Permanente</option>
-                    <option value="UnitedHealthcare">UnitedHealthcare</option>
-                  </datalist>
-                  {/* Current conditions: Textbox with multiple options **ADD MORE CONDITIONS IN SEPERATE FILE** */}
+                  <CreatetableSelect isMulti type="text" placeholder="e.g. Athena, Cigna" options={providerOptions} value={selectedProviders} onChange={handleChangeProviders} className="mb-2" />
+                  {/* Current conditions: Textbox with multiple options */}
                   <label className="block mb-1">Current medical conditions? <span className="text-gray-500 text-sm">(Enter multiple conditions if needed, separated by commas (e.g. Diabetes, Asthma).)</span></label>
-                  <Input type="text" placeholder="e.g. Diabetes, Asthma" value={current_conditions} onChange={e => setCurrentConditions(e.target.value)} list="condition-options" className="mb-2"/>
-                  <datalist id="condition-options">
-                    <option value="Diabetes" />
-                    <option value="Asthma" />
-                    <option value="Hypertension" />
-                    <option value="Heart Disease" />
-                    <option value="Cancer" />
-                    <option value="Allergies" />
-                  </datalist>
-                  {/* Current perscriptions: Textbox with multiple options **ADD MORE PERSCRIPTIONS IN SEPERATE FILE** */}
+                  <CreatetableSelect isMulti type="text" placeholder="e.g. Diabetes, Asthma" options={conditionOptions} value={selectedConditions} onChange={handleChangeConditions} className="mb-2" />
+                  {/* Current perscriptions: Textbox with multiple options */}
                   <label className="block mb-1">Current prescriptions? <span className="text-gray-500 text-sm">(Enter multiple perscriptions if needed, separated by commas (e.g. Metformin, Albuterol))</span></label>
-                  <Input type="text" placeholder="e.g. Metformin, Lisinopril" value={current_perscriptions} onChange={e => setCurrentPrescriptions(e.target.value)} list="prescription-options" className="mb-2"/>
-                  <datalist id="prescription-options">
-                    <option value="Metformin" />
-                    <option value="Lisinopril" />
-                    <option value="Atorvastatin" />
-                    <option value="Albuterol" />
-                    <option value="Levothyroxine" />
-                    <option value="Omeprazole" />
-                  </datalist>
+                  <CreatetableSelect isMulti type="text" placeholder="e.g. Metformin, Lisinopril" options={perscriptionOptions} value={selectedPerscriptions} onChange={handleChangePerscriptions} className="mb-2" />
                   {/* Coverage Level: Textbox with four options */}
                   <label className="block mb-1">Desired coverage level? <span className="text-gray-500 text-sm">(Enter bronze, silver, gold, or platinum)</span></label>
                   <Input type="text" placeholder="Coverage Level" value={coverage_level} onChange={e => setCoverageLevel(e.target.value)} list="coverage_level_options" className="mb-2"/>
                   <datalist id="coverage_level_options">
-                    <option value="bronze" />
-                    <option value="silver" />
-                    <option value="gold" />
-                    <option value="platinum" />
+                    <option value="Bronze" />
+                    <option value="Silver" />
+                    <option value="Gold" />
+                    <option value="Platinum" />
+                    <option value="Other" />
                   </datalist>
                   {/* Monthly Budget: A specific Range */}
                   <label className="block mb-1">Monthly budget? <span className="text-gray-500 text-sm">(Enter a set range of your budget)</span></label>
                   <Input type="text" placeholder="Monthly Budget" value={monthly_budget} onChange={e => setMonthlyBudget(e.target.value)} list="budget_options" className="mb-2"/>
                   <datalist id="budget_options">
-                    <option value="below $100" />
+                    <option value="Below $100" />
                     <option value="$100-$300" />
                     <option value="$300-$500" />
                     <option value="$500-$1000" />
-                    <option value="above $1000" />
+                    <option value="Above $1000" />
                   </datalist>
                   {/* Navigation Buttons */}
                   <div className="flex justify-between">
@@ -272,9 +355,9 @@ export default function UserInput() {
                         <input type="radio" name="medicare" checked={is_Medicare === false} onChange={() => setIsMedicare(false)} /> No
                       </label>
                     </div>
-                  {/* Recent Events Textbox */}
-                  <label className="block mb-1">List any recent events (e.g. surgery, 2023-12-01 etc):</label>
-                  <Input type="text" placeholder="Recent Events" value={recent_events} onChange={e => setRecentEvents(e.target.value)} className="mb-2" />
+                  {/* Events Multi Question Textbox MAY NEED TO MOVE SOMEWHERE ELSE*/}
+                  <label className="block mb-1">List past events that affected your health or 'none' if not (e.g. 'surgery, 2023-12-01', etc.):</label>
+                  <CreatetableSelect isMulti type="text" placeholder="e.g. (surgery, 2023-12-01), (accident, 2019-05-09), etc." options={eventOptions} value={selectedEvents} onChange={handleChangeEvents} className="mb-2" />
                   {/* Veteran Yes/No Question */}
                   <label className="block mb-1">Are you a Veteran?
                     <div className="flex space-x-4 mb-2">
@@ -284,7 +367,7 @@ export default function UserInput() {
                       </label>
                     </div>
                   </label>
-                  {/* Student Eligible for Insurance Yes/No Question */}
+                  {/* Student Elligiblility for Insurance Yes/No Question */}
                   <label className="block mb-1">Are you a Student Eligible for Insurance?
                     <div className="flex space-x-4 mb-2">
                       <label>
@@ -303,7 +386,7 @@ export default function UserInput() {
             </Card>
           </TabsContent>
 
-          {/* User Preference Submission Tab **ADD MORE QUESTIONS FOR SPECIAL CONCERNS or Preferences** */}
+          {/* User Preference Submission Tab **ADD MORE QUESTIONS AND ALSO MOVED SOMEWHERE ELSE** */}
           <TabsContent value="preferences">
             <Card>
               <CardContent className="space-y-4 py-6">
@@ -318,7 +401,7 @@ export default function UserInput() {
                   {/* Navigation, Submit, and Reset Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('eligibility')}>Back</Button>
-                    <Button type="submit">Submit Information</Button>
+                    <Button type="submit" onClick={submitClick}>Submit Information</Button>
                     <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
                   </div>
                 </form>
