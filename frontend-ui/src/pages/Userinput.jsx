@@ -11,6 +11,9 @@
 *   - Moved the 'Personal Information' and 'Employement' onto UserProfile.
 *   - Capitalized the options such as 'Bronze' or 'Family'
 *   - Able to download the JSON file of the userinput answers
+*   - Added reset button for each section.
+*   - Use reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation. 
+*   - Authenticate UI across the app.
 */
 
 import React, { useState } from 'react';
@@ -20,6 +23,10 @@ import { Input } from '@/components/ui/input';
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import Logo from '../assets/Logo.jpg';
+import { AuthContext } from '../AuthContext';
+import TopNavBar from '../components/TopNavBar';
+import SidebarNav from '../components/SidebarNav';
 
 export default function UserInput() {
   // State variables for current insurance
@@ -49,10 +56,7 @@ export default function UserInput() {
   // State variables for User Preferences
   const [user_insurance_docs, setUserInsuranceDocs] = useState('');
   const[proof_of_income_docs, setProofOfIncomeDocs] = useState('');
-
-  // Navigation hook
-  const navigate = useNavigate();
-
+  
   // State variable for active tab
   const [activeTab, setActiveTab] = useState('insurance');
 
@@ -273,29 +277,20 @@ export default function UserInput() {
   }
 
   return (
-    <main className="flex min-h-screen bg-gray-50 text-gray-800">
-      {/* Sidebar to Navigate Between Pages */}
-      <aside className="w-64 bg-white p-6 border-r border-gray-200 shadow-md">
-        <h2 className="text-2xl font-bold mb-8">PolicyAthena</h2>
-        <nav className="flex flex-col space-y-3">
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userprofile')}>User Profile</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userinput')}>User Input</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Matchedplan')}>Matched Plan</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Compareplans')}>Compare Plans</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/History')}>History</Button>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <div className="flex-1 p-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center">User Input</h1>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-2xl mx-auto">
-          <TabsList className="grid grid-cols-6 mb-6">
-            <TabsTrigger value="insurance">Insurance</TabsTrigger>
-            <TabsTrigger value="coverage">Coverage</TabsTrigger>
-            <TabsTrigger value="eligibility">Eligibility</TabsTrigger>
-            <TabsTrigger value="preferences">Preferences</TabsTrigger>
-          </TabsList>
+    <div className="min-h-screen bg-gray-50 text-gray-800">
+      <TopNavBar />
+      <div className="flex min-h-screen">
+        <SidebarNav />
+        {/* Main Content */}
+        <main className="flex-1 p-8 overflow-y-auto">
+          <h1 className="text-3xl font-bold mb-8 text-center">User Input</h1>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-2xl mx-auto">
+            <TabsList className="grid grid-cols-6 mb-6">
+              <TabsTrigger value="insurance">Insurance</TabsTrigger>
+              <TabsTrigger value="coverage">Coverage</TabsTrigger>
+              <TabsTrigger value="eligibility">Eligibility</TabsTrigger>
+              <TabsTrigger value="preferences">Preferences</TabsTrigger>
+            </TabsList>
 
           {/* Current Insurance Submission Tab*/}
           <TabsContent value="insurance">
@@ -349,15 +344,15 @@ export default function UserInput() {
                     <option value="Individual" /> 
                     <option value="Family" /> 
                   </datalist>
-                                    {/* Preferred providers: Textbox with multiple options */}
+                  {/* Preferred providers: Textbox with multiple options */}
                   <label className="block mb-1">Preferred providers? <span className="text-gray-500 text-sm">(Enter insurance providers you're interested in)</span></label>
                   <CreatableSelect isMulti type="text" placeholder="e.g. Athena, Cigna, or type custom provider" options={providerOptions} value={selectedProviders} onChange={handleChangeProviders} className="mb-2" />
                   {/* Current conditions: Textbox with multiple options */}
                   <label className="block mb-1">Current medical conditions? <span className="text-gray-500 text-sm">(Enter multiple conditions if needed, separated by commas (e.g. Diabetes, Asthma).)</span></label>
-                                     <CreatableSelect isMulti type="text" placeholder="e.g. Diabetes, Asthma" options={conditionOptions} value={selectedConditions} onChange={handleChangeConditions} className="mb-2" />
+                  <CreatableSelect isMulti type="text" placeholder="e.g. Diabetes, Asthma" options={conditionOptions} value={selectedConditions} onChange={handleChangeConditions} className="mb-2" />
                   {/* Current perscriptions: Textbox with multiple options */}
                   <label className="block mb-1">Current prescriptions? <span className="text-gray-500 text-sm">(Enter multiple perscriptions if needed, separated by commas (e.g. Metformin, Albuterol))</span></label>
-                                     <CreatableSelect isMulti type="text" placeholder="e.g. Metformin, Lisinopril" options={perscriptionOptions} value={selectedPerscriptions} onChange={handleChangePerscriptions} className="mb-2" />
+                  <CreatableSelect isMulti type="text" placeholder="e.g. Metformin, Lisinopril" options={perscriptionOptions} value={selectedPerscriptions} onChange={handleChangePerscriptions} className="mb-2" />
                   {/* Coverage Level: Textbox with four options */}
                   <label className="block mb-1">Desired coverage level? <span className="text-gray-500 text-sm">(Enter bronze, silver, gold, or platinum)</span></label>
                   <Input type="text" placeholder="Coverage Level" value={coverage_level} onChange={e => setCoverageLevel(e.target.value)} list="coverage_level_options" className="mb-2"/>
@@ -397,31 +392,31 @@ export default function UserInput() {
                 <form onSubmit={e => { e.preventDefault(); setActiveTab('preferences'); }}>
                   {/* US Citizen Yes/No Question */}
                   <label className="block mb-1">Are you a US Citizen?</label>
-                    <div className="flex space-x-4 mb-2">
-                      <label>
-                        <input type="radio" name="us_citizen" checked={is_US_Citizen === true} onChange={() => setIsUSCitizen(true)} /> Yes
-                        <input type="radio" name="us_citizen" checked={is_US_Citizen === false} onChange={() => setIsUSCitizen(false)} /> No
-                      </label>
-                    </div>
+                  <div className="flex space-x-4 mb-2">
+                    <label>
+                      <input type="radio" name="us_citizen" checked={is_US_Citizen === true} onChange={() => setIsUSCitizen(true)} /> Yes
+                      <input type="radio" name="us_citizen" checked={is_US_Citizen === false} onChange={() => setIsUSCitizen(false)} /> No
+                    </label>
+                  </div>
                   {/* Medicaid Yes/No Question */}
                   <label className="block mb-1">Are you eligible for Medicaid?</label>
-                    <div className="flex space-x-4 mb-2">
-                      <label>
-                        <input type="radio" name="medicaid" checked={is_Mediaid === true} onChange={() => setIsMedicaid(true)} /> Yes
-                        <input type="radio" name="medicaid" checked={is_Mediaid === false} onChange={() => setIsMedicaid(false)} /> No
-                      </label>
-                    </div>
+                  <div className="flex space-x-4 mb-2">
+                    <label>
+                      <input type="radio" name="medicaid" checked={is_Mediaid === true} onChange={() => setIsMedicaid(true)} /> Yes
+                      <input type="radio" name="medicaid" checked={is_Mediaid === false} onChange={() => setIsMedicaid(false)} /> No
+                    </label>
+                  </div>
                   {/* Medicare Yes/No Question */}
                   <label className="block mb-1">Are you eligible for Medicare?</label>
-                    <div className="flex space-x-4 mb-2">
-                      <label>
-                        <input type="radio" name="medicare" checked={is_Medicare === true} onChange={() => setIsMedicare(true)} /> Yes
-                        <input type="radio" name="medicare" checked={is_Medicare === false} onChange={() => setIsMedicare(false)} /> No
-                      </label>
-                    </div>
+                  <div className="flex space-x-4 mb-2">
+                    <label>
+                      <input type="radio" name="medicare" checked={is_Medicare === true} onChange={() => setIsMedicare(true)} /> Yes
+                      <input type="radio" name="medicare" checked={is_Medicare === false} onChange={() => setIsMedicare(false)} /> No
+                    </label>
+                  </div>
                   {/* Events Multi Question Textbox MAY NEED TO MOVE SOMEWHERE ELSE*/}
                   <label className="block mb-1">List past events that affected your health or 'none' if not (e.g. 'surgery, 2023-12-01', etc.):</label>
-                                     <CreatableSelect isMulti type="text" placeholder="e.g. (surgery, 2023-12-01), (accident, 2019-05-09), etc." options={eventOptions} value={selectedEvents} onChange={handleChangeEvents} className="mb-2" />
+                  <CreatableSelect isMulti type="text" placeholder="e.g. (surgery, 2023-12-01), (accident, 2019-05-09), etc." options={eventOptions} value={selectedEvents} onChange={handleChangeEvents} className="mb-2" />
                   {/* Veteran Yes/No Question */}
                   <label className="block mb-1">Are you a Veteran?
                     <div className="flex space-x-4 mb-2">
@@ -463,19 +458,20 @@ export default function UserInput() {
                   {/* Upload Proof of Income Documents */}
                   <label className="block mb-1">Upload proof of income documents:</label>
                   <Input type="text" placeholder="Proof of Income Documents" value={proof_of_income_docs} onChange={e => setProofOfIncomeDocs(e.target.value)} className="mb-2" />
-                                     {/* Navigation, Submit, and Reset Buttons */}
-                   <div className="flex justify-between">
-                     <Button type="button" variant="outline" onClick={() => setActiveTab('eligibility')}>Back</Button>
-                     <Button type="button" variant="outline" onClick={resetPreferences}>Reset Section</Button>
-                     <Button type="submit" onClick={submitClick}>Submit Information</Button>
-                     <Button type="button" variant="outline" onClick={handleReset}>Reset All</Button>
-                   </div>
+                  {/* Navigation, Submit, and Reset Buttons */}
+                  <div className="flex justify-between">
+                    <Button type="button" variant="outline" onClick={() => setActiveTab('eligibility')}>Back</Button>
+                    <Button type="button" variant="outline" onClick={resetPreferences}>Reset Section</Button>
+                    <Button type="submit" onClick={submitClick}>Submit Information</Button>
+                    <Button type="button" variant="outline" onClick={handleReset}>Reset All</Button>
+                  </div>
                 </form>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
-    </main>
+      </main>
+    </div>
+  </div>
   );
 }

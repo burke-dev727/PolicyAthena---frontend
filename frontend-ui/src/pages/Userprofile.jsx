@@ -1,20 +1,26 @@
 /*
  * File: UserProfile.jsx
- * Author: Name & James Zheng
+ * Author: James Zheng & Xinrui Hou
  * Date: 2025-07-29
  * Updated: 2025-08-05
  * Description: This is the user profile component for the PolicyAthena frontend. It includes a sidebar for navigation and a main content area for user profile details. This file defines the User Profile page layout and navigation.
  * Changes:
  * - Added a way to put data into a JSON file to import to backend
  * - Added an alert when user submits their data for debugging.
+ * - Used reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation. 
+ * - Authenticate UI across the app.
  */
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
+import Logo from '../assets/Logo.jpg';
+import { AuthContext } from '../AuthContext';
+import TopNavBar from '../components/TopNavBar';
+import SidebarNav from '../components/SidebarNav';
 
 export default function UserProfile() {
     // State variables for personal information
@@ -33,9 +39,6 @@ export default function UserProfile() {
     const [is_employeroffers, setIsEmployerOffers] = useState(false);
     const [annual_income, setAnnualIncome] = useState('');
     const [household_size, setHouseholdSize] = useState('');
-
-    // Navigate across pages
-    const navigate = useNavigate();
 
     // State variable for active tab
     const [activeTab, setActiveTab] = useState('personal');
@@ -125,114 +128,107 @@ export default function UserProfile() {
     alert(`PERSONAL INFORMATION\nName: ${name}\nAge: ${age}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}\nLocation: ${location}\nZipcode: ${zipcode}\nSocialSecurity: ${ssn}
       \nEMPLOYMENT DETAILS\nIs Employed: ${is_employed}\nEmployer Name: ${employer_name}\nEmployer Offers: ${is_employeroffers}\nAnnual Income: ${annual_income}\nHousehold Size: ${household_size}`);
   }
+
   return (
-    <main className="flex min-h-screen bg-gray-50 text-gray-800">
-      {/* Sidebar to Navigate Between Pages */}
-      <aside className="w-64 bg-white p-6 border-r border-gray-200 shadow-md">
-        <h2 className="text-2xl font-bold mb-8">PolicyAthena</h2>
-        <nav className="flex flex-col space-y-3">
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userprofile')}>User Profile</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userinput')}>User Input</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Matchedplan')}>Matched Plan</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Compareplans')}>Compare Plans</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/History')}>History</Button>
-        </nav>
-      </aside>
+    <div className="min-h-screen bg-gray-50 text-gray-800">
+      <TopNavBar />
+      <div className="flex min-h-screen">
+        <SidebarNav />
+        {/* Main Content */}
+        <main className="flex-1 p-8 overflow-y-auto">
+          <h1 className="text-3xl font-bold mb-8 text-center">User Profile</h1>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-2xl mx-auto">
+            <TabsList className="grid grid-cols-6 mb-6">
+              <TabsTrigger value="personal">Personal</TabsTrigger>
+              <TabsTrigger value="employment">Employment</TabsTrigger>
+            </TabsList>
 
-      {/* Main Content */}
-      <div className="flex-1 p-8 overflow-y-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center">User Profile</h1>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="max-w-2xl mx-auto">
-          <TabsList className="grid grid-cols-6 mb-6">
-            <TabsTrigger value="personal">Personal</TabsTrigger>
-            <TabsTrigger value="employment">Employment</TabsTrigger>
-          </TabsList>
-
-          {/* Personal Information Submission Tab */}
-          <TabsContent value="personal">
-            <Card>
-              <CardContent className="space-y-4 py-6">
-                <h2 className="text-xl font-semibold mb-4 text-center">Personal Information</h2>
-                <form onSubmit={e => { e.preventDefault(); setActiveTab('employment'); }}>
-                  {/* Name Question */}
-                  <label className="block mb-1">What is your full name?</label>
-                  <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="mb-2" />
-                  {/* Age Question */}
-                  <label className="block mb-1">What is your age?</label>
-                  <Input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="mb-2" />
-                  {/* Email Question */}
-                  <label className="block mb-1">What is your email address?</label>
-                  <Input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="mb-2" />
-                  {/* Phone Number Question */}
-                  <label className="block mb-1">What is your phone number?</label>
-                  <Input type="text" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} className="mb-2" />
-                  {/* Address, Location, Zipcode, and SSN Questions */}
-                  <label className="block mb-1">What is your address?</label>
-                  <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your location (City, State)?</label>
-                  <Input type="text" placeholder="Location (City, State)" value={location} onChange={e => setLocation(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your zipcode?</label>
-                  <Input type="text" placeholder="Zipcode" value={zipcode} onChange={e => setZipcode(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your Social Security Number?</label>
-                  <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} className="mb-2" />
-                  {/* Navigation Buttons */}
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={resetPersonal}>Reset Section</Button>
-                    <Button type="submit">Next</Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Employment Details Submission Tab */}
-          <TabsContent value="employment">
-            <Card>
-              <CardContent className="space-y-4 py-6">
-                <h2 className="text-xl font-semibold mb-4 text-center">Employment Details</h2>
-                <form onSubmit={handleSubmit}>
-                  {/* Employed Yes/No Question */}
-                  <label className="block mb-1">Are you currently employed?
-                    <div className="flex space-x-4 mb-2">
-                      <label>
-                        <input type="radio" name="is_emplyed" checked={is_employed === true} onChange={() => setIsEmployed(true)} /> Yes
-                        <input type="radio" name="is_employed" checked={is_employed === false} onChange={() => setIsEmployed(false)} /> No
-                      </label>
+            {/* Personal Information Submission Tab */}
+            <TabsContent value="personal">
+              <Card>
+                <CardContent className="space-y-4 py-6">
+                  <h2 className="text-xl font-semibold mb-4 text-center">Personal Information</h2>
+                  <form onSubmit={e => { e.preventDefault(); setActiveTab('employment'); }}>
+                    {/* Name Question */}
+                    <label className="block mb-1">What is your full name?</label>
+                    <Input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} className="mb-2" />
+                    {/* Age Question */}
+                    <label className="block mb-1">What is your age?</label>
+                    <Input type="number" placeholder="Age" value={age} onChange={e => setAge(e.target.value)} className="mb-2" />
+                    {/* Email Question */}
+                    <label className="block mb-1">What is your email address?</label>
+                    <Input type="text" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="mb-2" />
+                    {/* Phone Number Question */}
+                    <label className="block mb-1">What is your phone number?</label>
+                    <Input type="text" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} className="mb-2" />
+                    {/* Address, Location, Zipcode, and SSN Questions */}
+                    <label className="block mb-1">What is your address?</label>
+                    <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className="mb-2" />
+                    <label className="block mb-1">What is your location (City, State)?</label>
+                    <Input type="text" placeholder="Location (City, State)" value={location} onChange={e => setLocation(e.target.value)} className="mb-2" />
+                    <label className="block mb-1">What is your zipcode?</label>
+                    <Input type="text" placeholder="Zipcode" value={zipcode} onChange={e => setZipcode(e.target.value)} className="mb-2" />
+                    <label className="block mb-1">What is your Social Security Number?</label>
+                    <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} className="mb-2" />
+                    {/* Navigation Buttons */}
+                    <div className="flex justify-between">
+                      <Button type="button" variant="outline" onClick={resetPersonal}>Reset Section</Button>
+                      <Button type="submit">Next</Button>
                     </div>
-                  </label>
-                  {/* Employer Name Question */}
-                  <label className="block mb-1">What is your employer's name?</label>
-                  <Input type="text" placeholder="Employer Name" value={employer_name} onChange={e => setEmployerName(e.target.value)} className="mb-2" />
-                  {/* Employer Offers Insurance Yes/No Question */}
-                  <label className="block mb-1">Does your employer offer insurance?
-                    <div className="flex space-x-4 mb-2">
-                      <label>
-                        <input type="radio" name="is_employeroffers" checked={is_employeroffers === true} onChange={() => setIsEmployerOffers(true)} /> Yes
-                        <input type="radio" name="is_employeroffers" checked={is_employeroffers === false} onChange={() => setIsEmployerOffers(false)} /> No
-                      </label>
-                    </div>
-                  </label>
-                  {/* Annual Income and Household Size Questions */}
-                  <label className="block mb-1">What is your annual income?</label>
-                  <Input type="number" placeholder="Annual Income" value={annual_income} onChange={e => setAnnualIncome(e.target.value)} className="mb-2" />
-                  <label className="block mb-1">What is your household size?</label>
-                  <Input type="number" placeholder="Household Size" value={household_size} onChange={e => setHouseholdSize(e.target.value)} className="mb-2" />
-                  {/* Navigation Buttons */}
-                  {/* Navigation, Submit, and Reset Buttons */}
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('personal')}>Back</Button>
-                    <Button type="button" variant="outline" onClick={resetEmployment}>Reset Section</Button>
-                    <Button type="submit" onClick={submitClick}>Submit Information</Button>
-                    <Button type="button" variant="outline" onClick={handleReset}>Reset All</Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                  </form>
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-        </Tabs>
+            {/* Employment Details Submission Tab */}
+            <TabsContent value="employment">
+              <Card>
+                <CardContent className="space-y-4 py-6">
+                  <h2 className="text-xl font-semibold mb-4 text-center">Employment Details</h2>
+                  <form onSubmit={handleSubmit}>
+                    {/* Employed Yes/No Question */}
+                    <label className="block mb-1">Are you currently employed?
+                      <div className="flex space-x-4 mb-2">
+                        <label>
+                          <input type="radio" name="is_emplyed" checked={is_employed === true} onChange={() => setIsEmployed(true)} /> Yes
+                          <input type="radio" name="is_employed" checked={is_employed === false} onChange={() => setIsEmployed(false)} /> No
+                        </label>
+                      </div>
+                    </label>
+                    {/* Employer Name Question */}
+                    <label className="block mb-1">What is your employer's name?</label>
+                    <Input type="text" placeholder="Employer Name" value={employer_name} onChange={e => setEmployerName(e.target.value)} className="mb-2" />
+                    {/* Employer Offers Insurance Yes/No Question */}
+                    <label className="block mb-1">Does your employer offer insurance?
+                      <div className="flex space-x-4 mb-2">
+                        <label>
+                          <input type="radio" name="is_employeroffers" checked={is_employeroffers === true} onChange={() => setIsEmployerOffers(true)} /> Yes
+                          <input type="radio" name="is_employeroffers" checked={is_employeroffers === false} onChange={() => setIsEmployerOffers(false)} /> No
+                        </label>
+                      </div>
+                    </label>
+                    {/* Annual Income and Household Size Questions */}
+                    <label className="block mb-1">What is your annual income?</label>
+                    <Input type="number" placeholder="Annual Income" value={annual_income} onChange={e => setAnnualIncome(e.target.value)} className="mb-2" />
+                    <label className="block mb-1">What is your household size?</label>
+                    <Input type="number" placeholder="Household Size" value={household_size} onChange={e => setHouseholdSize(e.target.value)} className="mb-2" />
+                    {/* Navigation Buttons */}
+                    {/* Navigation, Submit, and Reset Buttons */}
+                    <div className="flex justify-between">
+                      <Button type="button" variant="outline" onClick={() => setActiveTab('personal')}>Back</Button>
+                      <Button type="button" variant="outline" onClick={resetEmployment}>Reset Section</Button>
+                      <Button type="submit" onClick={submitClick}>Submit Information</Button>
+                      <Button type="button" variant="outline" onClick={handleReset}>Reset All</Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+          </Tabs>
+        </main>
       </div>
-    </main>
+    </div>
   );
 }
 

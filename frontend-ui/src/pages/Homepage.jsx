@@ -4,101 +4,93 @@
 * Date: 2025-07-01
 * Updated: 2025-07-29
 * Description: This is the homepage component for the PolicyAthena frontend. It includes a sidebar for navigation and a main content area with login and signup forms.
-* Notes: Will need to change the name to "signup" as this is the first page if there is no account yet.
-* License: MIT License
+* Changes:
+*   - Modified the homepage to use reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation. 
 */
 
-import { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '../components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { useNavigate } from 'react-router-dom';
+import Logo from '../assets/Logo.jpg';
+import Hero from '../assets/Hero.png';
+import { AuthContext } from '../AuthContext';
+import TopNavBar from '../components/TopNavBar';
+import SidebarNav from '../components/SidebarNav';
 
 export default function HomePage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-
-  const handleLogin = () => {
-    alert(`Logging in with ${email}`);
-  };
-
-  const handleSignup = () => {
-    alert(`Creating account for ${username}`);
-  };
-  
-  const navigate = useNavigate();
-
   return (
-    <main className="flex min-h-screen bg-gray-50 text-gray-800">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white p-6 border-r border-gray-200 shadow-md">
-        <h2 className="text-2xl font-bold mb-8">PolicyAthena</h2>
-        <nav className="flex flex-col space-y-3">
-          {/* Add Additional pages and naviagtion for the buttons below. Also copy these buttons to every other page */}
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userprofile')}>User Profile</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Userinput')}>User Input</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Matchedplan')}>Matched Plan</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/Compareplans')}>Compare Plans</Button>
-          <Button variant="ghost" className="justify-start text-left hover:bg-gray-100" onClick={() => navigate('/History')}>History</Button>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <section className="flex flex-col items-center justify-center flex-1 p-10">
-        <Card className="w-full max-w-md shadow-lg">
-          <CardContent className="p-6">
-            <h1 className="text-3xl font-semibold mb-6 text-center">Welcome to PolicyAthena</h1>
-            <Tabs defaultValue="login" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-4">
-                <TabsTrigger value="login">Log In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
-              </TabsList>
-              <TabsContent value="login">
-                <form className="space-y-4">
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <Input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Button onClick={handleLogin} className="w-full">Log In</Button>
-                </form>
-              </TabsContent>
-              <TabsContent value="signup">
-                <form className="space-y-4">
-                  <Input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                  />
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                  <Input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Button onClick={handleSignup} className="w-full">Create Account</Button>
-                </form>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
+    <div className="min-h-screen bg-gray-50 text-gray-800">
+      <TopNavBar />
+      <div className="flex min-h-screen">
+        <SidebarNav />
+        {/* Main Content */}
+        <main className="flex-1 p-8 overflow-y-auto">
+          {/* Hero Section */}
+          <section className="mb-12">
+            <div className="text-center max-w-2xl mx-auto mb-8">
+              <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Unlock Smarter Health Coverage with AI</h1>
+              <p className="text-lg text-gray-600 mb-6">PolicyAthena simplifies health insurance comparison. Upload your policy, get personalized scores, and find the perfect plan for you.</p>
+              <Button className="px-6 py-3 text-lg font-semibold">Start Comparing Policies</Button>
+            </div>
+            <div className="flex justify-center">
+              {/* Hero Image */}
+              <img src={Hero} alt="PolicyAthena Hero" className="w-full max-w-2xl h-auto rounded-xl shadow-lg" />
+            </div>
+          </section>
+          {/* Why Choose Section */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold text-center mb-8">Why Choose PolicyAthena?</h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="text-3xl mb-2">🧩</div>
+                <h3 className="font-semibold mb-2">Personalized Plan Matching</h3>
+                <p className="text-gray-500 text-sm">Receive recommendations tailored to your health needs and budget, ensuring optimal coverage.</p>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="text-3xl mb-2">📄</div>
+                <h3 className="font-semibold mb-2">Effortless Policy Upload</h3>
+                <p className="text-gray-500 text-sm">Quickly upload your current policy documents for an in-depth, AI-powered analysis and comparison.</p>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="text-3xl mb-2">🏆</div>
+                <h3 className="font-semibold mb-2">Compare Top Providers</h3>
+                <p className="text-gray-500 text-sm">Access a comprehensive marketplace featuring leading insurance carriers and their best offerings.</p>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="text-3xl mb-2">💡</div>
+                <h3 className="font-semibold mb-2">Expert Guidance</h3>
+                <p className="text-gray-500 text-sm">Get personalized support from licensed advisors to navigate complex insurance options and choices.</p>
+              </div>
+            </div>
+          </section>
+          {/* Testimonials Section */}
+          <section className="mb-16">
+            <h2 className="text-2xl font-bold text-center mb-8">What Our Users Say</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-2xl">👤</div>
+                <p className="text-gray-600 italic mb-2">"PolicyAthena made comparing health plans incredibly simple. Found a better deal in minutes, saving both time and money!"</p>
+                <span className="text-blue-700 font-semibold">Michael R.</span>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-2xl">👩‍💼</div>
+                <p className="text-gray-600 italic mb-2">"The personalized recommendations were spot-on. Finally, health insurance that truly fits my family's unique needs!"</p>
+                <span className="text-blue-700 font-semibold">Sarah L.</span>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-2xl">👩‍⚕️</div>
+                <p className="text-gray-600 italic mb-2">"I used to dread insurance shopping. PolicyAthena transformed it into a surprisingly easy and pleasant experience!"</p>
+                <span className="text-blue-700 font-semibold">Jessica C.</span>
+              </div>
+            </div>
+          </section>
+          {/* Final CTA Section */}
+          <section className="bg-blue-50 rounded-xl py-10 px-6 text-center max-w-3xl mx-auto mb-8">
+            <h2 className="text-2xl font-bold mb-2">Ready to Find Your Perfect Plan?</h2>
+            <p className="text-gray-700 mb-4">Join thousands of happy users who found better health coverage with PolicyAthena.</p>
+            <Button className="px-6 py-2 text-lg font-semibold">Get Started Now</Button>
       </section>
     </main>
+      </div>
+    </div>
   );
 }
