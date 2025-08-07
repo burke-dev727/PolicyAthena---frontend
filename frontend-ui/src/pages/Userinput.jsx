@@ -14,7 +14,7 @@
 */
 
 import React, { useState } from 'react';
-import CreatetableSelect from 'react-select/creatable'
+import CreatableSelect from 'react-select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs'
 export default function UserInput() {
   // State variables for current insurance
   const [have_insurance, setHaveInsurance] = useState(false);
-  const [insurance_provider, setProviderInsurance] = useState('');
+  const [insurance_provider, setProviderInsurance] = useState([]);
   const [policy_number, setPolicyNumber] = useState('');
   const [start_date, setStartDate] = useState('');
   const [end_date, setEndDate] = useState('');
@@ -57,6 +57,7 @@ export default function UserInput() {
   const [activeTab, setActiveTab] = useState('insurance');
 
   // Multi-Select
+  const [selectedInsuranceProviders, setSelectedInsuranceProviders] = useState([]);
   const [selectedProviders, setSelectedProviders] = useState([]);
   const [selectedConditions, setSelectedConditions] = useState([]);
   const [selectedPerscriptions, setSelectedPerscriptions] = useState([]);
@@ -68,7 +69,7 @@ export default function UserInput() {
 
     // Validate required fields - Xinrui Hou
     const data = {
-      have_insurance, insurance_provider, policy_number, start_date, end_date, source,
+      have_insurance, insurance_provider: insurance_provider.join(', '), policy_number, start_date, end_date, source,
       coverage_type, providers: providers.join(', '), current_conditions: current_conditions.join(', '), current_perscriptions: current_perscriptions.join(', '), coverage_level, monthly_budget,
       is_US_Citizen, is_Mediaid, is_Medicare, events: events.join(', '), is_Veteran, is_StudentEligible,
       user_insurance_docs, proof_of_income_docs
@@ -110,32 +111,85 @@ export default function UserInput() {
   // Function to reset all form fields
   const handleReset = () => {
     setHaveInsurance(false);
-    setProviderInsurance('');
+    setProviderInsurance([]);
     setPolicyNumber('');
     setStartDate('');
     setEndDate('');
     setSource('');
     setCoverageType('');
-    setProviders('');
-    setCurrentConditions('');
-    setCurrentPrescriptions('');
+    setProviders([]);
+    setCurrentConditions([]);
+    setCurrentPrescriptions([]);
     setCoverageLevel('');
     setMonthlyBudget('');
     setIsUSCitizen(false);
     setIsMedicaid(false);
     setIsMedicare(false);
-    setEvents('');
+    setEvents([]);
     setIsVeteran(false);
     setIsStudentEligible(false);
     setUserInsuranceDocs('');
     setProofOfIncomeDocs('');
-    setSelectedProviders('');
-    setSelectedConditions('');
-    setSelectedPerscriptions('');
-    setSelectedEvents('');
+    setSelectedInsuranceProviders([]);
+    setSelectedProviders([]);
+    setSelectedConditions([]);
+    setSelectedPerscriptions([]);
+    setSelectedEvents([]);
   };
 
-  // Providers multi-list
+  // Individual section reset functions
+  const resetInsurance = () => {
+    setHaveInsurance(false);
+    setProviderInsurance([]);
+    setPolicyNumber('');
+    setStartDate('');
+    setEndDate('');
+    setSource('');
+    setSelectedInsuranceProviders([]);
+  };
+
+  const resetCoverage = () => {
+    setCoverageType('');
+    setProviders([]);
+    setCurrentConditions([]);
+    setCurrentPrescriptions([]);
+    setCoverageLevel('');
+    setMonthlyBudget('');
+    setSelectedProviders([]);
+    setSelectedConditions([]);
+    setSelectedPerscriptions([]);
+  };
+
+  const resetEligibility = () => {
+    setIsUSCitizen(false);
+    setIsMedicaid(false);
+    setIsMedicare(false);
+    setEvents([]);
+    setIsVeteran(false);
+    setIsStudentEligible(false);
+    setSelectedEvents([]);
+  };
+
+  const resetPreferences = () => {
+    setUserInsuranceDocs('');
+    setProofOfIncomeDocs('');
+  };
+
+  // Insurance Providers multi-list
+  const insuranceProviderOptions =[
+    {value: "aetna", label: "Aetna"},
+    {value: "bluecrossblueshield", label: "Blue Cross Blue Shield"},
+    {value: "cigna", label: "Cigna"},
+    {value: "humana", label: "Humana"},
+    {value: "kaiserpermanente", label: "Kaiser Permanente"},
+    {value: "unitedhealthcare", label: "United Healthcare"},
+    {value: "anthem", label: "Anthem"},
+    {value: "metlife", label: "MetLife"},
+    {value: "prudential", label: "Prudential"},
+    {value: "other", label: "Other"},
+  ];
+
+  // Preferred Providers multi-list
   const providerOptions =[
     {value: "athena", label: "Athena"},
     {value: "bluecrossblueshield", label: "Blue Cross Blue Shield"},
@@ -143,6 +197,7 @@ export default function UserInput() {
     {value: "humana", label: "Humana"},
     {value: "kaiserpermanente", label: "Kaiser Permanente"},
     {value: "unitedhealthcare", label: "United Healthcare"},
+    {value: "other", label: "Other"},
   ];
 
   // Condtiions multi-list
@@ -174,7 +229,14 @@ export default function UserInput() {
     {value: "none", label: "None"}
   ]
 
-  // Multi-list variables storage for Providers
+  // Multi-list variables storage for Insurance Providers
+  const handleChangeInsuranceProviders = (selectedOptions) => {
+    setSelectedInsuranceProviders(selectedOptions);
+    const values0 = selectedOptions.map(option => option.value);
+    setProviderInsurance(values0);
+  }
+
+  // Multi-list variables storage for Preferred Providers
   const handleChangeProviders = (selectedOptions) => {
     setSelectedProviders(selectedOptions);
     const values1 = selectedOptions.map(option => option.value);
@@ -204,9 +266,9 @@ export default function UserInput() {
   
   // Alert input variables
   const submitClick = () => {
-    alert(`CURRENT INSURNACE\nHave Insurance: ${have_insurance}\nInsurance Provider: ${insurance_provider}\nPolicy Number: ${policy_number}\nStart Date: ${start_date}\nEnd Date: ${end_date}\nSource: ${source}`)
-    alert(`COVERAGE NEEDS\nCoverage Type: ${coverage_type}\nProviders: ${providers}\nCurrent Conditions: ${current_conditions}\nCurrent Prescriptions: ${current_perscriptions}\nCoverage Level: ${coverage_level}\nMonthly Budget: ${monthly_budget}`);
-    alert(`ELIGIBILITY\nUS Citizen: ${is_US_Citizen}\nMedicaid: ${is_Mediaid}\nMedicare: ${is_Medicare}\nRecent Events: ${events}\nVeteran: ${is_Veteran}\nStudent Eligible: ${is_StudentEligible}`);
+    alert(`CURRENT INSURANCE\nHave Insurance: ${have_insurance}\nInsurance Provider: ${insurance_provider.join(', ')}\nPolicy Number: ${policy_number}\nStart Date: ${start_date}\nEnd Date: ${end_date}\nSource: ${source}`)
+    alert(`COVERAGE NEEDS\nCoverage Type: ${coverage_type}\nProviders: ${providers.join(', ')}\nCurrent Conditions: ${current_conditions.join(', ')}\nCurrent Prescriptions: ${current_perscriptions.join(', ')}\nCoverage Level: ${coverage_level}\nMonthly Budget: ${monthly_budget}`);
+    alert(`ELIGIBILITY\nUS Citizen: ${is_US_Citizen}\nMedicaid: ${is_Mediaid}\nMedicare: ${is_Medicare}\nRecent Events: ${events.join(', ')}\nVeteran: ${is_Veteran}\nStudent Eligible: ${is_StudentEligible}`);
     alert(`PREFERENCES\nInsurance Docs: ${user_insurance_docs}\nProof of Income Docs: ${proof_of_income_docs}`);
   }
 
@@ -252,7 +314,7 @@ export default function UserInput() {
                   </label>
                   {/* Insurance Provider Questions */}
                   <label className="block mb-1">Who is your insurance provider?</label>
-                  <Input type="text" placeholder="Insurance Provider" value={insurance_provider} onChange={e => setProviderInsurance(e.target.value)} className="mb-2" />
+                  <CreatableSelect isMulti type="text" placeholder="e.g. Aetna, Blue Cross Blue Shield" options={insuranceProviderOptions} value={selectedInsuranceProviders} onChange={handleChangeInsuranceProviders} className="mb-2" />
                   {/* Policy Number Question */}
                   <label className="block mb-1">What is your policy number?</label>
                   <Input type="text" placeholder="Policy Number" value={policy_number} onChange={e => setPolicyNumber(e.target.value)} className="mb-2" />
@@ -265,7 +327,8 @@ export default function UserInput() {
                   <label className="block mb-1">What is the source of your insurance?</label>
                   <Input type="text" placeholder="Source" value={source} onChange={e => setSource(e.target.value)} className="mb-2" />
                   {/* Navigation Buttons */}
-                  <div className="flex justify-end">
+                  <div className="flex justify-between">
+                    <Button type="button" variant="outline" onClick={resetInsurance}>Reset Section</Button>
                     <Button type="submit">Next</Button>
                   </div>
                 </form>
@@ -280,21 +343,21 @@ export default function UserInput() {
                 <h2 className="text-xl font-semibold mb-4 text-center">Coverage Needs</h2>
                 <form onSubmit={e => { e.preventDefault(); setActiveTab('eligibility'); }}>
                   {/* Coverage Type: Textbox with only two valid answers */}
-                  <label className="block mb-1"> What type of coverage do you have? <span className="text-gray-500 text-sm">(Enter "individual" or "family")</span></label>
-                  <Input type="text" placeholder="individual or family" value={coverage_type} onChange={e => setCoverageType(e.target.value)} list="coverage-type-options" className="mb-2"/>
+                  <label className="block mb-1"> What type of coverage do you have? <span className="text-gray-500 text-sm">(Enter "Individual" or "Family")</span></label>
+                  <Input type="text" placeholder="Individual or Family" value={coverage_type} onChange={e => setCoverageType(e.target.value)} list="coverage-type-options" className="mb-2"/>
                   <datalist id="coverage-type-options"> 
                     <option value="Individual" /> 
                     <option value="Family" /> 
                   </datalist>
-                  {/* Preferred providers: Textbox with multiple options */}
-                  <label className="block mb-1">Preferred providers? <span className="text-gray-500 text-sm">(Enter Doctor, Hospital, or Clinic)</span></label>
-                  <CreatetableSelect isMulti type="text" placeholder="e.g. Athena, Cigna" options={providerOptions} value={selectedProviders} onChange={handleChangeProviders} className="mb-2" />
+                                    {/* Preferred providers: Textbox with multiple options */}
+                  <label className="block mb-1">Preferred providers? <span className="text-gray-500 text-sm">(Enter insurance providers you're interested in)</span></label>
+                  <CreatableSelect isMulti type="text" placeholder="e.g. Athena, Cigna, or type custom provider" options={providerOptions} value={selectedProviders} onChange={handleChangeProviders} className="mb-2" />
                   {/* Current conditions: Textbox with multiple options */}
                   <label className="block mb-1">Current medical conditions? <span className="text-gray-500 text-sm">(Enter multiple conditions if needed, separated by commas (e.g. Diabetes, Asthma).)</span></label>
-                  <CreatetableSelect isMulti type="text" placeholder="e.g. Diabetes, Asthma" options={conditionOptions} value={selectedConditions} onChange={handleChangeConditions} className="mb-2" />
+                                     <CreatableSelect isMulti type="text" placeholder="e.g. Diabetes, Asthma" options={conditionOptions} value={selectedConditions} onChange={handleChangeConditions} className="mb-2" />
                   {/* Current perscriptions: Textbox with multiple options */}
                   <label className="block mb-1">Current prescriptions? <span className="text-gray-500 text-sm">(Enter multiple perscriptions if needed, separated by commas (e.g. Metformin, Albuterol))</span></label>
-                  <CreatetableSelect isMulti type="text" placeholder="e.g. Metformin, Lisinopril" options={perscriptionOptions} value={selectedPerscriptions} onChange={handleChangePerscriptions} className="mb-2" />
+                                     <CreatableSelect isMulti type="text" placeholder="e.g. Metformin, Lisinopril" options={perscriptionOptions} value={selectedPerscriptions} onChange={handleChangePerscriptions} className="mb-2" />
                   {/* Coverage Level: Textbox with four options */}
                   <label className="block mb-1">Desired coverage level? <span className="text-gray-500 text-sm">(Enter bronze, silver, gold, or platinum)</span></label>
                   <Input type="text" placeholder="Coverage Level" value={coverage_level} onChange={e => setCoverageLevel(e.target.value)} list="coverage_level_options" className="mb-2"/>
@@ -318,6 +381,7 @@ export default function UserInput() {
                   {/* Navigation Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('insurance')}>Back</Button>
+                    <Button type="button" variant="outline" onClick={resetCoverage}>Reset Section</Button>
                     <Button type="submit">Next</Button>
                   </div>
                 </form>
@@ -357,7 +421,7 @@ export default function UserInput() {
                     </div>
                   {/* Events Multi Question Textbox MAY NEED TO MOVE SOMEWHERE ELSE*/}
                   <label className="block mb-1">List past events that affected your health or 'none' if not (e.g. 'surgery, 2023-12-01', etc.):</label>
-                  <CreatetableSelect isMulti type="text" placeholder="e.g. (surgery, 2023-12-01), (accident, 2019-05-09), etc." options={eventOptions} value={selectedEvents} onChange={handleChangeEvents} className="mb-2" />
+                                     <CreatableSelect isMulti type="text" placeholder="e.g. (surgery, 2023-12-01), (accident, 2019-05-09), etc." options={eventOptions} value={selectedEvents} onChange={handleChangeEvents} className="mb-2" />
                   {/* Veteran Yes/No Question */}
                   <label className="block mb-1">Are you a Veteran?
                     <div className="flex space-x-4 mb-2">
@@ -379,6 +443,7 @@ export default function UserInput() {
                   {/* Navigation Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('coverage')}>Back</Button>
+                    <Button type="button" variant="outline" onClick={resetEligibility}>Reset Section</Button>
                     <Button type="submit">Next</Button>
                   </div>
                 </form>
@@ -398,12 +463,13 @@ export default function UserInput() {
                   {/* Upload Proof of Income Documents */}
                   <label className="block mb-1">Upload proof of income documents:</label>
                   <Input type="text" placeholder="Proof of Income Documents" value={proof_of_income_docs} onChange={e => setProofOfIncomeDocs(e.target.value)} className="mb-2" />
-                  {/* Navigation, Submit, and Reset Buttons */}
-                  <div className="flex justify-between">
-                    <Button type="button" variant="outline" onClick={() => setActiveTab('eligibility')}>Back</Button>
-                    <Button type="submit" onClick={submitClick}>Submit Information</Button>
-                    <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
-                  </div>
+                                     {/* Navigation, Submit, and Reset Buttons */}
+                   <div className="flex justify-between">
+                     <Button type="button" variant="outline" onClick={() => setActiveTab('eligibility')}>Back</Button>
+                     <Button type="button" variant="outline" onClick={resetPreferences}>Reset Section</Button>
+                     <Button type="submit" onClick={submitClick}>Submit Information</Button>
+                     <Button type="button" variant="outline" onClick={handleReset}>Reset All</Button>
+                   </div>
                 </form>
               </CardContent>
             </Card>

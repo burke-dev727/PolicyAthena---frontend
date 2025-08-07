@@ -100,6 +100,26 @@ export default function UserProfile() {
     setHouseholdSize('');
   };
 
+  // Individual section reset functions
+  const resetPersonal = () => {
+    setName('');
+    setAge('');
+    setEmail('');
+    setPhone('');
+    setAddress('');
+    setLocation('');
+    setZipcode('');
+    setSocialSecurity('');
+  };
+
+  const resetEmployment = () => {
+    setIsEmployed(false);
+    setEmployerName('');
+    setIsEmployerOffers(false);
+    setAnnualIncome('');
+    setHouseholdSize('');
+  };
+
   // Alert input variables
   const submitClick = () => {
     alert(`PERSONAL INFORMATION\nName: ${name}\nAge: ${age}\nEmail: ${email}\nPhone: ${phone}\nAddress: ${address}\nLocation: ${location}\nZipcode: ${zipcode}\nSocialSecurity: ${ssn}
@@ -156,7 +176,8 @@ export default function UserProfile() {
                   <label className="block mb-1">What is your Social Security Number?</label>
                   <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} className="mb-2" />
                   {/* Navigation Buttons */}
-                  <div className="flex justify-end">
+                  <div className="flex justify-between">
+                    <Button type="button" variant="outline" onClick={resetPersonal}>Reset Section</Button>
                     <Button type="submit">Next</Button>
                   </div>
                 </form>
@@ -200,8 +221,9 @@ export default function UserProfile() {
                   {/* Navigation, Submit, and Reset Buttons */}
                   <div className="flex justify-between">
                     <Button type="button" variant="outline" onClick={() => setActiveTab('personal')}>Back</Button>
+                    <Button type="button" variant="outline" onClick={resetEmployment}>Reset Section</Button>
                     <Button type="submit" onClick={submitClick}>Submit Information</Button>
-                    <Button type="button" variant="outline" onClick={handleReset}>Reset</Button>
+                    <Button type="button" variant="outline" onClick={handleReset}>Reset All</Button>
                   </div>
                 </form>
               </CardContent>
