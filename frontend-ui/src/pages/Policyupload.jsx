@@ -1,0 +1,29 @@
+/*
+ * File: Policyupload.jsx
+ * Author: Xinrui Hou
+ * Date: 2025-08-06
+ * Description: 
+ *   - Modified the Policy Upload page placeholder.
+ *   - Refactored to use reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation and authentication UI across the app.
+ */
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import TopNavBar from '../components/TopNavBar';
+import SidebarNav from '../components/SidebarNav';
+
+export default function PolicyUpload() {
+    return (
+        <div className="min-h-screen bg-gray-50 text-gray-800">
+            <TopNavBar />
+            <div className="flex min-h-screen">
+                <SidebarNav />
+                {/* Main Content */}
+                <main className="flex-1 p-8 overflow-y-auto">
+                    <h1 className="text-3xl font-bold mb-6 text-center">Policy Upload</h1>
+                    {/* Add policy upload content here */}
+                </main>
+            </div>
+        </div>
+    );
+}; 
