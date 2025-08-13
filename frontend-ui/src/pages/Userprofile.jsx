@@ -14,11 +14,8 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import Logo from '../assets/Logo.jpg';
-import { AuthContext } from '../AuthContext';
 import TopNavBar from '../components/TopNavBar';
 import SidebarNav from '../components/SidebarNav';
 
@@ -51,6 +48,7 @@ export default function UserProfile() {
         const data = {
             name, age, email, phone, address, location, zipcode, ssn,
             is_employed, employer_name, is_employeroffers, annual_income, household_size,
+            source: "userprofile"
         };
 
         // Convert to JSON string

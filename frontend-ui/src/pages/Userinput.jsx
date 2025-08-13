@@ -20,11 +20,8 @@ import React, { useState } from 'react';
 import CreatableSelect from 'react-select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useNavigate } from "react-router-dom";
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import Logo from '../assets/Logo.jpg';
-import { AuthContext } from '../AuthContext';
 import TopNavBar from '../components/TopNavBar';
 import SidebarNav from '../components/SidebarNav';
 
@@ -41,7 +38,7 @@ export default function UserInput() {
   const [coverage_type, setCoverageType] = useState('');
   const [providers, setProviders] = useState([]);
   const [current_conditions, setCurrentConditions] = useState([]);
-  const [current_perscriptions, setCurrentPrescriptions] = useState([]);
+  const [current_prescriptions, setCurrentPrescriptions] = useState([]);
   const [coverage_level, setCoverageLevel] = useState('');
   const [monthly_budget, setMonthlyBudget] = useState('');
 
@@ -64,7 +61,7 @@ export default function UserInput() {
   const [selectedInsuranceProviders, setSelectedInsuranceProviders] = useState([]);
   const [selectedProviders, setSelectedProviders] = useState([]);
   const [selectedConditions, setSelectedConditions] = useState([]);
-  const [selectedPerscriptions, setSelectedPerscriptions] = useState([]);
+  const [selectedPrescriptions, setSelectedPrescriptions] = useState([]);
   const [selectedEvents, setSelectedEvents] = useState([]);
 
   // Function to handle form submission
@@ -74,9 +71,10 @@ export default function UserInput() {
     // Validate required fields - Xinrui Hou
     const data = {
       have_insurance, insurance_provider: insurance_provider.join(', '), policy_number, start_date, end_date, source,
-      coverage_type, providers: providers.join(', '), current_conditions: current_conditions.join(', '), current_perscriptions: current_perscriptions.join(', '), coverage_level, monthly_budget,
+      coverage_type, providers: providers.join(', '), current_conditions: current_conditions.join(', '), current_prescriptions: current_prescriptions.join(', '), coverage_level, monthly_budget,
       is_US_Citizen, is_Mediaid, is_Medicare, events: events.join(', '), is_Veteran, is_StudentEligible,
-      user_insurance_docs, proof_of_income_docs
+      user_insurance_docs, proof_of_income_docs,
+      source: "userinput"
     };
 
     // Convert to JSON string
@@ -218,7 +216,7 @@ export default function UserInput() {
   ]
 
   // Perscriptions multi-list
-  const perscriptionOptions =[
+  const prescriptionOptions =[
     {value: "lisinopril", label: "Lisinopril"},
     {value: "metformin", label: "Metformin"},
     {value: "atorvastatin", label: "Atorvastatin"},
@@ -254,9 +252,9 @@ export default function UserInput() {
     setCurrentConditions(values2);
   }
 
-  //Multi-list variables storage for Perscriptions
-  const handleChangePerscriptions = (selectedOptions) => {
-    setSelectedPerscriptions(selectedOptions);
+  //Multi-list variables storage for Prescriptions
+  const handleChangePrescriptions = (selectedOptions) => {
+    setSelectedPrescriptions(selectedOptions);
     const values3 = selectedOptions.map(option => option.value);
     setCurrentPrescriptions(values3);
   }
@@ -271,7 +269,7 @@ export default function UserInput() {
   // Alert input variables
   const submitClick = () => {
     alert(`CURRENT INSURANCE\nHave Insurance: ${have_insurance}\nInsurance Provider: ${insurance_provider.join(', ')}\nPolicy Number: ${policy_number}\nStart Date: ${start_date}\nEnd Date: ${end_date}\nSource: ${source}`)
-    alert(`COVERAGE NEEDS\nCoverage Type: ${coverage_type}\nProviders: ${providers.join(', ')}\nCurrent Conditions: ${current_conditions.join(', ')}\nCurrent Prescriptions: ${current_perscriptions.join(', ')}\nCoverage Level: ${coverage_level}\nMonthly Budget: ${monthly_budget}`);
+    alert(`COVERAGE NEEDS\nCoverage Type: ${coverage_type}\nProviders: ${providers.join(', ')}\nCurrent Conditions: ${current_conditions.join(', ')}\nCurrent Prescriptions: ${current_prescriptions.join(', ')}\nCoverage Level: ${coverage_level}\nMonthly Budget: ${monthly_budget}`);
     alert(`ELIGIBILITY\nUS Citizen: ${is_US_Citizen}\nMedicaid: ${is_Mediaid}\nMedicare: ${is_Medicare}\nRecent Events: ${events.join(', ')}\nVeteran: ${is_Veteran}\nStudent Eligible: ${is_StudentEligible}`);
     alert(`PREFERENCES\nInsurance Docs: ${user_insurance_docs}\nProof of Income Docs: ${proof_of_income_docs}`);
   }
@@ -350,9 +348,9 @@ export default function UserInput() {
                   {/* Current conditions: Textbox with multiple options */}
                   <label className="block mb-1">Current medical conditions? <span className="text-gray-500 text-sm">(Enter multiple conditions if needed, separated by commas (e.g. Diabetes, Asthma).)</span></label>
                   <CreatableSelect isMulti type="text" placeholder="e.g. Diabetes, Asthma" options={conditionOptions} value={selectedConditions} onChange={handleChangeConditions} className="mb-2" />
-                  {/* Current perscriptions: Textbox with multiple options */}
-                  <label className="block mb-1">Current prescriptions? <span className="text-gray-500 text-sm">(Enter multiple perscriptions if needed, separated by commas (e.g. Metformin, Albuterol))</span></label>
-                  <CreatableSelect isMulti type="text" placeholder="e.g. Metformin, Lisinopril" options={perscriptionOptions} value={selectedPerscriptions} onChange={handleChangePerscriptions} className="mb-2" />
+                  {/* Current prescriptions: Textbox with multiple options */}
+                  <label className="block mb-1">Current prescriptions? <span className="text-gray-500 text-sm">(Enter multiple prescriptions if needed, separated by commas (e.g. Metformin, Albuterol))</span></label>
+                  <CreatableSelect isMulti type="text" placeholder="e.g. Metformin, Lisinopril" options={prescriptionOptions} value={selectedPrescriptions} onChange={handleChangePrescriptions} className="mb-2" />
                   {/* Coverage Level: Textbox with four options */}
                   <label className="block mb-1">Desired coverage level? <span className="text-gray-500 text-sm">(Enter bronze, silver, gold, or platinum)</span></label>
                   <Input type="text" placeholder="Coverage Level" value={coverage_level} onChange={e => setCoverageLevel(e.target.value)} list="coverage_level_options" className="mb-2"/>
