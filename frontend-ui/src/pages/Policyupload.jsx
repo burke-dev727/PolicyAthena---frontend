@@ -1,12 +1,14 @@
 /*
  * File: Policyupload.jsx
- * Author: Xinrui Hou
+ * Author: Xinrui Hou & James Zheng
  * Date: 2025-08-06
+ * Updated: 2025-08-14
  * Description: 
  *   - Modified the Policy Upload page placeholder.
  *   - Refactored to use reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation and authentication UI across the app.
  *   - Implemented PDF upload functionality with file validation and preview.
  *   - Will need to give Picture Icons for upload and file sections
+ *   - Added png files to for the upload sections.
  */
 
 import React, { useRef, useState } from 'react';
@@ -14,6 +16,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import TopNavBar from '../components/TopNavBar';
 import SidebarNav from '../components/SidebarNav';
+import UploadIcon from '../assets/Upload.png';
+import PdfIcon from '../assets/File.png';
 
 export default function PolicyUpload() {
     const fileInputRef = useRef(null);
@@ -59,11 +63,7 @@ export default function PolicyUpload() {
                             <div className="w-full max-w-md bg-white rounded-xl shadow-lg flex flex-col items-center justify-center p-8 border-2 border-dashed border-blue-300 cursor-pointer transition hover:border-blue-500"
                                 onClick={handleBoxClick} style={{ minHeight: '320px '}}
                             >
-                                <img
-                                    src="/placeholder-image.png"
-                                    alt="Upload Icon in Uploading Files"
-                                    className="w-24 h-24 mb-4 object-contain"
-                                />
+                                <img src={UploadIcon} alt="Upload Icon" className="w-24 h-24 mb-4 object-contain" />
                                 <p className="text-gray-500 text-center mb-6">Supported formats: PDF (max 10MB per file)</p>
                                 <Button className="px-6 py-2 text-lg font-semibold mb-2">Upload PDF Files</Button>
                                 <Input ref={fileInputRef} type="file" accept="application/pdf" multiple className="hidden"
@@ -83,7 +83,7 @@ export default function PolicyUpload() {
                                     {uploadedFiles.map((file, idx) => (
                                         <li key={file.name + file.size} className="flex items-center justify-between py-2">
                                             <div className="flex items-center">
-                                                <img src="/placeholder-image.png" alt="PDF file icon" className="w-6 h-6 mr-3 object-contain" />
+                                                <img src={PdfIcon} alt="PDF file icon" className="w-6 h-6 mr-3 object-contain" />
                                                 <span className="font-medium">{file.name}</span>
                                                 <span className="ml-2 text-gray-400 text-xs">({(file.size / 1024).toFixed(1)} KB)</span>
                                             </div>
