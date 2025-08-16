@@ -9,10 +9,11 @@
  *   - Added project information and team sections.
  *   - Added Logo and Images for branding.
  *   - Added Contact Us button to redirect to Contact Page
+ *   - Replaced Logo with Detailed Head as Picture and edited the text.
  */
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import Logo from '../assets/Logo.jpg';
+import DetailedHead from '../assets/DetailHead.png';
 import TopNavBar from '../components/TopNavBar';
 import SidebarNav from '../components/SidebarNav';
 import { useNavigate } from 'react-router-dom';
@@ -31,16 +32,16 @@ export default function About() {
             <div className="text-center max-w-2xl mx-auto mb-8">
                <h1 className="text-4xl md:text-5xl font-extrabold mb-4">About PolicyAthena</h1>
                <p className="text-lg text-gray-600 mb-6"> {/* Edit */}
-                 This project is a comprehensive platform designed to simplify health insurance comparison and selection using AI-powered tools. 
-                 Here you can add more details about the mission, vision, and features of PolicyAthena.
+                 PolicyAthena is building the future of health insurance — personalized, intelligent, and accessible.
+                  Our platform simplifies the process of understanding and managing health insurance, making it easier for users to make informed decisions about their healthcare needs.
                </p>
             </div>
             <div className="flex justify-center">
               {/* Logo or About Image */}
-              <img src={Logo} alt="PolicyAthena Logo" className="w-40 h-40 rounded-full shadow-lg" />
+              <img src={DetailedHead} alt="PolicyAthena Logo" className="w-40 h-40 rounded-full shadow-lg" />
             </div>
           </section>
-          {/* ProjectDetails Section FILL IT IN */}
+          {/* ProjectDetails Section */}
           <section className="mb-16">
             <h2 className="text-2xl font-bold text-center mb-8">Project Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
@@ -48,21 +49,21 @@ export default function About() {
                 <div className="text-3xl mb-2">🎯</div>
                 <h3 className="font-semibold mb-2">Our Mission</h3>
                 <p className="text-gray-500 text-sm">
-                  Briefly describe the mission of PolicyAthena.
+                  To give users a seamless and efficient way to plan their health insurance needs without the usual complexities.
                 </p>
               </div>
               <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
                 <div className="text-3xl mb-2">🚀</div>
                 <h3 className="font-semibold mb-2">Key Features</h3>
                 <p className="text-gray-500 text-sm">
-                  List or describe the main features of the platform.
+                  PolicyAthena offers input validation, personalized healthcare plans, transformative user profile, and simple OpenAI to generate human-readable outputs.
                 </p>
               </div>
               <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
                 <div className="text-3xl mb-2">🔒</div>
                 <h3 className="font-semibold mb-2">Security & Privacy</h3>
                 <p className="text-gray-500 text-sm">
-                  Explain your approach to user data security and privacy.
+                  We prioritize user data security and privacy, ensuring all personal information is encrypted and handled with care.
                 </p>
               </div>
             </div>
@@ -98,7 +99,7 @@ export default function About() {
               </div>
             </div>
           </section> */}
-          {/* Final CTA Section */}
+          {/* Final Comment Section */}
           <section className="bg-blue-50 rounded-xl py-10 px-6 text-center max-w-3xl mx-auto mb-8">
             <h2 className="text-2xl font-bold mb-2">Want to Learn More?</h2>
             <p className="text-gray-700 mb-4">

@@ -27,7 +27,10 @@ export default function InsuranceMarket() {
           <section className="mb-12">
             <div className="text-center max-w-2xl mx-auto mb-8">
               <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Insurance Market</h1>
-              <p className="text-xl text-gray-600 mb-6">Future stuff will be added</p>
+              <p className="text-xl text-gray-600 mb-6">We're launching an AI-driven program that brings healthcare and insurance together like never before. 
+                Through InsuranceMarket, our platform partners with top insurance companies to help people discover the right health coverage—faster, smarter, and more personalized. By analyzing individual needs, our AI recommends the best plans, making healthcare more affordable, accessible, and transparent. 
+                With this, we're not just simplifying insurance—we're redefining how people choose better healthcare plans.
+                </p>
             </div>
           </section>
 
