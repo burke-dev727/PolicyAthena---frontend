@@ -9,6 +9,7 @@
  *   - Implemented PDF upload functionality with file validation and preview.
  *   - Will need to give Picture Icons for upload and file sections
  *   - Added png files to for the upload sections.
+ *   - Added comments for code for better understanding.
  */
 
 import React, { useRef, useState } from 'react';
@@ -20,13 +21,16 @@ import UploadIcon from '../assets/Upload.png';
 import PdfIcon from '../assets/File.png';
 
 export default function PolicyUpload() {
+    // Refs and state for file upload
     const fileInputRef = useRef(null);
     const [uploadedFiles, setUploadedFiles] = useState([]);
 
+    // Handle box click to trigger file input
     const handleBoxClick = () => {
         fileInputRef.current.click();
     };
 
+    // Handle file input change
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         if (files.length > 0) {
@@ -40,6 +44,7 @@ export default function PolicyUpload() {
         e.target.value = '';
     }
 
+    // Handle file delete
     const handleDelete = (index) => {
         setUploadedFiles(prev => prev.filter((_, i) => i !== index));
     };

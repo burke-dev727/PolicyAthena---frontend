@@ -9,6 +9,7 @@
  * - Added an alert when user submits their data for debugging.
  * - Used reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation. 
  * - Authenticate UI across the app.
+ * - Updated UI for personal details for better experience.
  */
 
 import React, { useState } from 'react';
@@ -159,13 +160,16 @@ export default function UserProfile() {
                     {/* Phone Number Question */}
                     <label className="block mb-1">What is your phone number?</label>
                     <Input type="text" placeholder="Phone" value={phone} onChange={e => setPhone(e.target.value)} className="mb-2" />
-                    {/* Address, Location, Zipcode, and SSN Questions */}
-                    <label className="block mb-1">What is your address?</label>
+                    {/* Address Question (address number, street name) */}
+                    <label className="block mb-1">What is your address (address number, street name)?</label>
                     <Input type="text" placeholder="Address" value={address} onChange={e => setAddress(e.target.value)} className="mb-2" />
+                    {/* Location Question (City, State) */}
                     <label className="block mb-1">What is your location (City, State)?</label>
                     <Input type="text" placeholder="Location (City, State)" value={location} onChange={e => setLocation(e.target.value)} className="mb-2" />
+                    {/* Zipcode Question */}
                     <label className="block mb-1">What is your zipcode?</label>
                     <Input type="text" placeholder="Zipcode" value={zipcode} onChange={e => setZipcode(e.target.value)} className="mb-2" />
+                    {/* Social Security Number Question */}
                     <label className="block mb-1">What is your Social Security Number?</label>
                     <Input type="text" placeholder="Social Security Number" value={ssn} onChange={e => setSocialSecurity(e.target.value)} className="mb-2" />
                     {/* Navigation Buttons */}
@@ -222,7 +226,6 @@ export default function UserProfile() {
                 </CardContent>
               </Card>
             </TabsContent>
-
           </Tabs>
         </main>
       </div>

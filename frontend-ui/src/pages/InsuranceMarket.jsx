@@ -8,11 +8,9 @@
  *   - Refactored to use reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation and authentication UI across the app.
  *   - Updated UI to match Homepage structure with future content placeholder and big picture.
  *   - Added image and deleted the 'coming soon' button.
+ *   - Deleted unnecessary imports.
  */
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import Logo from '../assets/Logo.jpg';
-import Hero from '../assets/Hero.png';
 import TopNavBar from '../components/TopNavBar';
 import SidebarNav from '../components/SidebarNav';
 import InsuranceIcon from '../assets/Insurance.png'; 
@@ -32,8 +30,8 @@ export default function InsuranceMarket() {
               <p className="text-xl text-gray-600 mb-6">Future stuff will be added</p>
             </div>
           </section>
-          
-          {/* Content Section */}
+
+          {/* Coming Soon Section */}
           <section className="mb-16">
             <div className="bg-white rounded-lg shadow p-8 text-center max-w-3xl mx-auto">
               <img src={InsuranceIcon} alt="Coming Soon" className="w-50 h-50 mb-8 object-contain" />

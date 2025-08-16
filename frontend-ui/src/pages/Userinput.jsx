@@ -14,6 +14,7 @@
 *   - Added reset button for each section.
 *   - Use reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation. 
 *   - Authenticate UI across the app.
+    - Changed fields to fit the DB schema.
 */
 
 import React, { useState } from 'react';
@@ -70,7 +71,7 @@ export default function UserInput() {
 
     // Validate required fields - Xinrui Hou
     const data = {
-      have_insurance, insurance_provider: insurance_provider.join(', '), policy_number, start_date, end_date, source,
+      have_insurance, insurance_provider: insurance_provider.join(', '), policy_number, start_date, end_date,
       coverage_type, providers: providers.join(', '), current_conditions: current_conditions.join(', '), current_prescriptions: current_prescriptions.join(', '), coverage_level, monthly_budget,
       is_US_Citizen, is_Mediaid, is_Medicare, events: events.join(', '), is_Veteran, is_StudentEligible,
       user_insurance_docs, proof_of_income_docs,
