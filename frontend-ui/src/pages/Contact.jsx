@@ -1,18 +1,25 @@
 /*
- * File: Contact.jsx
- * Author: Xinrui Hou
+ * File: About.jsx
+ * Author: Xinrui Hou & James Zheng
  * Date: 2025-08-06
+ * Updated: 2025-08-12
  * Description: 
- *   - Added the Contact page placeholder.
+ *   - Added the About page placeholder.
  *   - Refactored to use reusable TopNavBar (with login/signup modal) and SidebarNav for consistent navigation and authentication UI across the app.
- *   - Deleted Sections for sending the email because it wastes time and there are other more important tasks to complete, so it will be for show.
+ *   - Added project information and team sections.
+ *   - Added Logo and Images for branding.
+ *   - Added Contact Us button to redirect to Contact Page
+ *   - Replaced Logo with Detailed Head as Picture and edited the text.
  */
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import DetailedHead from '../assets/DetailHead.png';
 import TopNavBar from '../components/TopNavBar';
 import SidebarNav from '../components/SidebarNav';
+import { useNavigate } from 'react-router-dom';
 
-export default function Contact() {
+export default function About() {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
       <TopNavBar />
@@ -20,54 +27,85 @@ export default function Contact() {
         <SidebarNav />
         {/* Main Content */}
         <main className="flex-1 p-8 overflow-y-auto">
-          {/* Contact Header */}
+          {/* About Project Section */}
           <section className="mb-12">
             <div className="text-center max-w-2xl mx-auto mb-8">
-              <h1 className="text-4xl md:text-5xl font-extrabold mb-4">Contact PolicyAthena</h1>
-              <p className="text-lg text-gray-600 mb-6">
-                Reach out to us for questions, support, or partnership opportunities. We value your feedback and inquiries!
-              </p>
+               <h1 className="text-4xl md:text-5xl font-extrabold mb-4">About PolicyAthena</h1>
+               <p className="text-lg text-gray-600 mb-6"> {/* Edit */}
+                 PolicyAthena is building the future of health insurance — personalized, intelligent, and accessible.
+                  Our platform simplifies the process of understanding and managing health insurance, making it easier for users to make informed decisions about their healthcare needs.
+               </p>
             </div>
-            
+            <div className="flex justify-center">
+              {/* Logo or About Image */}
+              <img src={DetailedHead} alt="PolicyAthena Logo" className="w-40 h-40 rounded-full shadow-lg" />
+            </div>
           </section>
-          {/* Contact Methods */}
+          {/* ProjectDetails Section */}
           <section className="mb-16">
-            <h2 className="text-2xl font-bold text-center mb-8">Contact Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold text-center mb-8">Project Information</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
-                <div className="text-3xl mb-2">📧</div>
-                <h3 className="font-semibold mb-2">Email</h3>
+                <div className="text-3xl mb-2">🎯</div>
+                <h3 className="font-semibold mb-2">Our Mission</h3>
                 <p className="text-gray-500 text-sm">
-                  contact@policyathena.com
+                  To give users a seamless and efficient way to plan their health insurance needs without the usual complexities.
                 </p>
               </div>
               <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
-                <div className="text-3xl mb-2">📞</div>
-                <h3 className="font-semibold mb-2">Phone</h3>
+                <div className="text-3xl mb-2">🚀</div>
+                <h3 className="font-semibold mb-2">Key Features</h3>
                 <p className="text-gray-500 text-sm">
-                  (123) 456-7890
+                  PolicyAthena offers input validation, personalized healthcare plans, transformative user profile, and simple OpenAI to generate human-readable outputs.
+                </p>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="text-3xl mb-2">🔒</div>
+                <h3 className="font-semibold mb-2">Security & Privacy</h3>
+                <p className="text-gray-500 text-sm">
+                  We prioritize user data security and privacy, ensuring all personal information is encrypted and handled with care.
                 </p>
               </div>
             </div>
           </section>
-          {/* Contact Form SAVE WHAT WAS TYPED IN AND SEND TO EMAIL*/}
+          {/* Team Section FILL WITH PROFILE PICS AND MAKE IT BIGGER, ALSO REMVOE TEMPORARY UNTIL SUBMISSION IS CLOSE
           <section className="mb-16">
-            <h2 className="text-2xl font-bold text-center mb-8">Send Us a Message </h2>
-            <form className="max-w-xl mx-auto bg-white rounded-lg shadow p-8 flex flex-col gap-6">
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="name">Name</label>
-                <input id="name" name="name" type="text" placeholder="Your Name" className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"/>
+            <h2 className="text-2xl font-bold text-center mb-8">Meet the Team</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-2xl">👤</div>
+                <h3 className="font-semibold mb-1">Xinrui Hou</h3>
+                <p className="text-gray-500 text-sm">Project Manager / Full Stack Developer</p>
               </div>
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="email">Email</label>
-                <input id="email" name="email" type="email" placeholder="you@example.com" className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"/>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-2xl">👤</div>
+                <h3 className="font-semibold mb-1">Zhaoyan Zhi</h3>
+                <p className="text-gray-500 text-sm">Backend Developer</p>
               </div>
-              <div>
-                <label className="block text-gray-700 font-semibold mb-2" htmlFor="message">Message</label>
-                <textarea id="message" name="message" rows={4} placeholder="Type your message here..."  className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"/>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-2xl">👤</div>
+                <h3 className="font-semibold mb-1">James Delin Zheng</h3>
+                <p className="text-gray-500 text-sm">Frontend Developer / UI Designer</p>
               </div>
-               <Button className="px-6 py-2 text-lg font-semibold w-full">Send Message</Button>
-            </form>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-2xl">👤</div>
+                <h3 className="font-semibold mb-1">Wenlong Yang</h3>
+                <p className="text-gray-500 text-sm">Frontend Developer</p>
+              </div>
+              <div className="bg-white rounded-lg shadow p-6 flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-gray-200 rounded-full mb-2 flex items-center justify-center text-2xl">👤</div>
+                <h3 className="font-semibold mb-1">Baofang Zhang</h3>
+                <p className="text-gray-500 text-sm">Build RAG and Agents Systems</p>
+              </div>
+            </div>
+          </section> */}
+          {/* Final Comment Section */}
+          <section className="bg-blue-50 rounded-xl py-10 px-6 text-center max-w-3xl mx-auto mb-8">
+            <h2 className="text-2xl font-bold mb-2">Want to Learn More?</h2>
+            <p className="text-gray-700 mb-4">
+              Contact us or explore more about PolicyAthena and our team.
+            </p>
+            <Button className="px-6 py-2 text-lg font-semibold" onClick={() => navigate('/Contact')}>Contact Us</Button>
           </section>
         </main>
       </div>

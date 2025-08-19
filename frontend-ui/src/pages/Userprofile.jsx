@@ -19,6 +19,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 import TopNavBar from '../components/TopNavBar';
 import SidebarNav from '../components/SidebarNav';
+import { userProfileService } from '../services/userService.jsx';
 
 export default function UserProfile() {
     // State variables for personal information
@@ -52,37 +53,27 @@ export default function UserProfile() {
             source: "userprofile"
         };
 
-        // Convert to JSON string
-        const jsonString = JSON.stringify(data, null, 2);
-
-        // Create and trigger file download
-        const blob = new Blob([jsonString], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'userprofile_answers_data.json';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    
-        alert('Data has been saved as a JSON file');
-    
-        // Send to Backend
-        const response = await fetch('http://localhost:8000/userInput/profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-        });
-
-        // Handle the response
-        const result = await response.json();
-        if (result.error) {
-            alert("Submission failed: " + result.error);
-            // Optionally, highlight the fields or scroll to the first error
+        // Send data to backend using the service
+        const result = await userProfileService.submitUserProfile(data);
+        
+        if (result.success) {
+            alert(`Data submitted successfully! Profile ID: ${result.profile_id}`);
+            
+            // Convert to JSON string for download
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'userprofile_answers_data.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            alert('Data has also been saved as a JSON file');
         } else {
-            alert('Data submitted successfully!');
-            // Optionally, redirect or clear the form
+            alert(`Submission failed: ${result.error}`);
         }
     };
   // Function to reset all form fields
